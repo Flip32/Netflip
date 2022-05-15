@@ -25,6 +25,21 @@ const linking: LinkingOptions<RootStackParamList> = {
               TabTwoScreen: 'search',
             },
           },
+          Soon: {
+            screens: {
+              TabTwoScreen: 'soon',
+            },
+          },
+          Downloads: {
+            screens: {
+              TabTwoScreen: 'downloads',
+            },
+          },
+          Menu: {
+            screens: {
+              TabTwoScreen: 'menu',
+            },
+          },
         },
       },
       Modal: 'modal',
