@@ -1,32 +1,59 @@
-import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import React from 'react'
+import {Dimensions, StatusBar, StyleSheet} from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
 import { RootTabScreenProps } from '../types';
+import { Text, View } from '../components/Themed';
+import Header from '../components/Header'
+import Hero from '../components/Hero'
+import Movies from '../components/Movies'
+import styled from 'styled-components/native'
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'TabOne'>) {
+const Container = styled.ScrollView`
+  flex: 1;
+  background-color: #000;
+`;
+
+const Poster = styled.ImageBackground`
+  width: 100%;
+  height: ${(Dimensions.get('window').height * 81) / 100}px;
+`;
+
+const Gradient = styled(LinearGradient)`
+  height: 100%;
+`;
+
+const api = [
+  require('../assets/movies/movie1.jpg'),
+  require('../assets/movies/movie2.jpg'),
+  require('../assets/movies/movie3.jpg'),
+  require('../assets/movies/movie4.jpg'),
+];
+
+export default function TabOneScreen({ navigation }: RootTabScreenProps<'Home'>) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabOneScreen.tsx" />
-    </View>
+    <>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+      <Container>
+        <Poster source={require('../assets/poster.jpg')}>
+          <Gradient
+            locations={[0, 0.2, 0.6, 0.93]}
+            colors={[
+              'rgba(0,0,0,0.5)',
+              'rgba(0,0,0,0.0)',
+              'rgba(0,0,0,0.0)',
+              'rgba(0,0,0,1)',
+            ]}>
+            <Header />
+            <Hero />
+          </Gradient>
+          <Movies label="Recomendados" item={api} />
+          <Movies label="Top 10" item={api} />
+        </Poster>
+      </Container>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
