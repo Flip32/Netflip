@@ -10,14 +10,14 @@ const Container = styled.TouchableOpacity`
 
 const avatarSize = css`
   width: ${(props) => {
-    console.log('avatarSize', props);
+    // console.log('avatarSize', props);
     return props.big ? '100px' : '60px';
   }};
   height: ${(props) => (props.big ? '100px' : '60px')};
   margin: 10px;
 `;
 
-const AvatarIcon = styled.Image`
+export const AvatarIcon = styled.Image`
   ${avatarSize}
 `;
 
@@ -51,7 +51,7 @@ const Editable = (props) => {
 };
 
 const Avatar = (props) => {
-  console.log('avatar', props);
+  // console.log('avatar', props);
   return (
     <Container style={{alignItems: 'center'}} onPress={props.onPress}>
       {props.uri ? (

@@ -1,5 +1,18 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {Profile} from '../screens/MoreScreen'
+import {css} from 'styled-components'
+import {Pressable} from 'react-native'
+
+const avatarSize = css`
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+`;
+
+export const AvatarIcon = styled.Image`
+  ${avatarSize}
+`;
 
 const Container = styled.View`
   align-items: center;
@@ -7,6 +20,7 @@ const Container = styled.View`
   justify-content: space-between;
   padding: 25px 25px 0 25px;
   width: 100%;
+  margin-top: 10px;
 `;
 
 const Logo = styled.Image`
@@ -22,10 +36,16 @@ const Label = styled.Text`
 
 const Menu = styled.TouchableOpacity``;
 
-const Header = () => {
+type Header = {
+  perfil: Profile
+  navigation: any
+}
+
+const Header = (props: Header) => {
+  const { perfil, navigation } = props;
   return (
     <Container>
-      {/*<Logo resizeMode="contain" source={require('../assets/logo.png')} />*/}
+      <Logo resizeMode="contain" source={require('../assets/logo.png')} />
       <Menu>
         <Label>Séries</Label>
       </Menu>
@@ -35,6 +55,13 @@ const Header = () => {
       <Menu>
         <Label>Minha lista</Label>
       </Menu>
+      <Pressable
+        onPress={() => navigation.navigate('More')}
+      >
+        <AvatarIcon
+          source={perfil.icon}
+        />
+      </Pressable>
     </Container>
   );
 };

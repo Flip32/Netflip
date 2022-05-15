@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {View} from 'react-native';
 import Avatar from '../components/Avatar';
 
-const Screen = styled.View`
+const Screen = styled.SafeAreaView`
   flex: 1;
   background-color: #000;
   padding: 10px;
@@ -71,7 +71,8 @@ const ChooseIcon = (props: any) => {
       </View>
       <Label>Create your avatar</Label>
       <Button
-        color="#1a1718"
+        // color="#1a1718"
+        color="#fff"
         title="CAMERA"
         onPress={() => {
           props.navigation.navigate('Camera', {

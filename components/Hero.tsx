@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import styled from 'styled-components/native';
 
 import {Feather, Ionicons} from '@expo/vector-icons';
 import {useSpring, animated} from 'react-spring';
+import {Item} from './Movies'
 
 const Container = styled.View`
   position: absolute;
@@ -10,6 +11,21 @@ const Container = styled.View`
   align-items: center;
   bottom: 8px;
   opacity: 1;
+`;
+
+const TitleContainer = styled.View`
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
+const Title = styled.Text`
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  margin-top: 10px;
+  flex-shrink: 1;
+  text-align: center;
 `;
 
 const Banner = styled.Image`
@@ -70,15 +86,42 @@ const TextButtonPlay = styled.Text`
   padding-left: 5px;
 `;
 
-const Hero = () => {
+type Hero = {
+  item: Item
+};
+
+const Hero = (props: Hero) => {
+  const {item} = props;
+  
+  const renderTags = () => {
+    const tags = item.Genre
+    if(!tags) return null;
+    const tagsArr = tags.split(',');
+    return (
+      <Tags>
+        {
+          tagsArr.map((tag, index) => {
+            if(index > 4) return null;
+            return (
+              <Fragment key={tag}>
+                <MenuTag>{tag}</MenuTag>
+                {(index !== tagsArr.length - 1 && index < 4) && <Separator />}
+              </Fragment>
+            )
+          })
+        }
+      </Tags>
+    )
+  }
+  
   return (
     <Container>
-      <Banner resizeMode="contain" source={require('../assets/banner.png')} />
-      <Tags>
-        <MenuTag>Envolvente</MenuTag>
-        <Separator />
-        <MenuTag>Empolgantes</MenuTag>
-      </Tags>
+      <TitleContainer>
+        <Title>{item.Title}</Title>
+      </TitleContainer>
+      {
+        renderTags()
+      }
       <MenuHero>
         <Button>
           <Feather name="plus" size={26} color="#FFF" />

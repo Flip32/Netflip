@@ -13,6 +13,10 @@ import HomeScreen from '../screens/HomeScreen'
 import SearchScreen from '../screens/SearchScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import ProfileToEdit from '../screens/ProfileToEditScreen'
+import More from '../screens/MoreScreen'
+import ChooseIcon from '../screens/ChooseIconScreen'
+import CameraScreen from '../screens/CameraScreen'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -32,9 +36,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="ProfileToEdit" component={ProfileToEdit} options={{ headerShown: false }} />
+      <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
+      <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
+      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -53,7 +61,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Menu"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
@@ -91,8 +99,9 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Menu"
-        component={SearchScreen}
+        component={More}
         options={{
+          headerShown: false,
           title: 'Menu',
           tabBarIcon: ({ color }) => <TabBarIcon name="bars" color={color} />,
         }}

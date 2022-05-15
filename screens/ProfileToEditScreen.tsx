@@ -52,9 +52,9 @@ const ProfileToEdit = (props) => {
       ),
     });
   }, []);
-
+  
   const items = twoBytwo(props?.route?.params?.profiles);
-
+  
   return (
     <Screen>
       {items.map((row, rowIndex) => (
@@ -67,7 +67,7 @@ const ProfileToEdit = (props) => {
 const Row = (props) => {
   return (
     <RowContainer style={{flexDirection: 'row', justifyContent: 'center'}}>
-      {props.items.map((column, colIndex) => (
+      {props.items.map((column) => (
         <Avatar
           key={column.name}
           big={true}

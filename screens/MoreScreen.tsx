@@ -37,7 +37,13 @@ const ButtonLabel = styled.Text`
   color: gray;
 `;
 
-let profilesAvailables = [
+export type Profile = {
+  icon: string
+  name: string
+  uri?: string | null
+}
+
+let profilesAvailables: Profile[] = [
   {
     icon: require('../assets/avatars/avatar1.png'),
     name: 'José',
@@ -84,7 +90,7 @@ const replaceAvatarsWithImage = (props, profilesAvailables) => {
 };
 
 const selectProfile = (navigation, item) => {
-  navigation.navigate('Home', {name: item.name});
+  navigation.navigate('Home', {perfil: item});
 };
 
 const editProfile = (navigation, profiles) => {
@@ -105,7 +111,7 @@ const More = (props) => {
                 image={item.icon}
                 uri={item.uri}
                 name={item.name}
-                onPress={(item) => selectProfile(props.navigation, item)}
+                onPress={() => selectProfile(props.navigation, item)}
               />
             );
           })}
