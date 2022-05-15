@@ -29,7 +29,7 @@ const api = [
   require('../assets/movies/movie4.jpg'),
 ];
 
-export default function TabOneScreen({ navigation }: RootTabScreenProps<'Home'>) {
+export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   return (
     <>
       <StatusBar
