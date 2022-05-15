@@ -73,7 +73,7 @@ const TextButtonPlay = styled.Text`
 const Hero = () => {
   return (
     <Container>
-      {/*<Banner resizeMode="contain" source={require('../assets/banner.png')} />*/}
+      <Banner resizeMode="contain" source={require('../assets/banner.png')} />
       <Tags>
         <MenuTag>Envolvente</MenuTag>
         <Separator />

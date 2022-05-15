@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, TouchableWithoutFeedback} from 'react-native';
+import {Dimensions, Image, TouchableWithoutFeedback} from 'react-native';
 import {useSpring, animated} from 'react-spring';
 import styled from 'styled-components/native';
 
@@ -27,9 +27,41 @@ const MovieCard = styled.View`
   padding: 10px 10px 0;
 `;
 
+export type Item = {
+  Title: string
+  Year: string
+  Rated: string
+  Released: string
+  Runtime: string
+  Genre: string
+  Director: string
+  Writer: string
+  Actors: string
+  Plot: string
+  Language: string
+  Country: string
+  Awards: string
+  Poster: string
+  Ratings: {
+    Source: string
+    Value: string
+  }[]
+  Metascore: string
+  imdbRating: string
+  imdbVotes: string
+  imdbID: string
+  Type: string
+  DVD?: string
+  BoxOffice?: string
+  Production?: string
+  Website?: string
+  Response: string
+  totalSeasons?: string
+};
+
 type Movies = {
   label: string
-  item: string[]
+  itens: Item[]
 };
 
 type PressMovie = {
@@ -38,7 +70,7 @@ type PressMovie = {
 };
 
 const Movies = (props: Movies) => {
-  const {label, item} = props;
+  const {label, itens} = props;
   const [pressing, setPressedIn] = useState<PressMovie>({pressed: false});
 
   const translate = useSpring({
@@ -54,7 +86,7 @@ const Movies = (props: Movies) => {
     <Container>
       <Label>{label}</Label>
       <MovieScroll horizontal>
-        {item.map((movie, index) => {
+        {itens.map((movie, index) => {
           return (
             <MovieCard key={String(index)}>
               <TouchableWithoutFeedback
@@ -67,7 +99,7 @@ const Movies = (props: Movies) => {
                 <AnimatedMoviePoster
                   // style={index === pressing.index ? {transform: [translate]} : null}
                   resizeMode="cover"
-                  source={movie}
+                  source={{  uri: movie.Poster }}
                 />
               </TouchableWithoutFeedback>
             </MovieCard>
