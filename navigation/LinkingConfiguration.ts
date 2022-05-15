@@ -1,9 +1,3 @@
-/**
- * Learn more about deep linking with React Navigation
- * https://reactnavigation.org/docs/deep-linking
- * https://reactnavigation.org/docs/configuring-links
- */
-
 import { LinkingOptions } from '@react-navigation/native';
 import * as Linking from 'expo-linking';
 
@@ -17,27 +11,27 @@ const linking: LinkingOptions<RootStackParamList> = {
         screens: {
           Home: {
             screens: {
-              TabOneScreen: 'home',
+              HomeScreen: 'home',
             },
           },
           Search: {
             screens: {
-              TabTwoScreen: 'search',
+              SearchScreen: 'search',
             },
           },
           Soon: {
             screens: {
-              TabTwoScreen: 'soon',
+              SearchScreen: 'soon',
             },
           },
           Downloads: {
             screens: {
-              TabTwoScreen: 'downloads',
+              SearchScreen: 'downloads',
             },
           },
           Menu: {
             screens: {
-              TabTwoScreen: 'menu',
+              SearchScreen: 'menu',
             },
           },
         },
