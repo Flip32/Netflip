@@ -50,9 +50,9 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
             <Header />
             <Hero />
           </Gradient>
-          <Movies label="Recomendados" item={api} />
-          <Movies label="Top 10" item={api} />
         </Poster>
+        <Movies label="Recomendados" item={api} />
+        <Movies label="Top 10" item={api} />
       </Container>
     </>
   );

@@ -1,12 +1,18 @@
-import { StyleSheet } from 'react-native';
+import {StatusBar, StyleSheet} from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import React from 'react'
 
 export default function SearchScreen() {
   return (
-    <View style={styles.container}>
-    </View>
+    <>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+    </>
   );
 }
 

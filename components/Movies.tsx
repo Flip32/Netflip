@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Dimensions, TouchableWithoutFeedback} from 'react-native';
 import {useSpring, animated} from 'react-spring';
-
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -25,13 +24,22 @@ const MoviePoster = styled.Image`
 const AnimatedMoviePoster = animated(MoviePoster);
 
 const MovieCard = styled.View`
-  padding: 10px;
-  padding-right: 10px;
-  padding-left: 0px;
+  padding: 10px 10px 0;
 `;
 
-const Movies = ({label, item}) => {
-  const [pressing, setPressedIn] = useState({pressed: false});
+type Movies = {
+  label: string
+  item: string[]
+};
+
+type PressMovie = {
+  pressed: boolean
+  index?: number
+};
+
+const Movies = (props: Movies) => {
+  const {label, item} = props;
+  const [pressing, setPressedIn] = useState<PressMovie>({pressed: false});
 
   const translate = useSpring({
     to: {
@@ -57,9 +65,7 @@ const Movies = ({label, item}) => {
                   setPressedIn({pressed: true, index: index});
                 }}>
                 <AnimatedMoviePoster
-                  style={
-                    index === pressing.index ? {transform: [translate]} : null
-                  }
+                  // style={index === pressing.index ? {transform: [translate]} : null}
                   resizeMode="cover"
                   source={movie}
                 />
