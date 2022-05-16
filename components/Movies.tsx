@@ -5,6 +5,7 @@ import styled from 'styled-components/native';
 
 const Container = styled.View`
   padding: 0px;
+  margin-bottom: 10px;
 `;
 
 const Label = styled.Text`

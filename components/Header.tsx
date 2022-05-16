@@ -1,8 +1,8 @@
 import React from 'react';
+import { Pressable } from 'react-native'
 import styled from 'styled-components/native';
 import {Profile} from '../screens/MoreScreen'
 import {css} from 'styled-components'
-import {Pressable} from 'react-native'
 
 const avatarSize = css`
   width: 30px;
@@ -36,23 +36,31 @@ const Label = styled.Text`
 
 const Menu = styled.TouchableOpacity``;
 
+export type Filtro = 'series' | 'movie' | 'myList' | null
+
 type Header = {
   perfil: Profile
   navigation: any
+  callBackFilter: (value: Filtro) => void
 }
 
 const Header = (props: Header) => {
-  const { perfil, navigation } = props;
+  const { perfil, navigation, callBackFilter } = props;
   return (
     <Container>
-      <Logo resizeMode="contain" source={require('../assets/logo.png')} />
-      <Menu>
+      <Pressable onPress={() => navigation.navigate('Home')}>
+        <Logo onPress={() => callBackFilter(null)} resizeMode="contain" source={require('../assets/logo.png')} />
+      </Pressable>
+      
+      <Menu onPress={() => callBackFilter('series')} >
         <Label>Séries</Label>
       </Menu>
-      <Menu>
+      
+      <Menu onPress={() => callBackFilter('movie')}>
         <Label>Filmes</Label>
       </Menu>
-      <Menu>
+      
+      <Menu onPress={() => {}}>
         <Label>Minha lista</Label>
       </Menu>
       <Pressable

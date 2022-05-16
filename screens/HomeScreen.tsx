@@ -4,7 +4,7 @@ import {LinearGradient} from 'expo-linear-gradient'
 import { RootTabScreenProps } from '../types'
 import styled from 'styled-components/native'
 import { Text, View } from '../components/Themed'
-import Header from '../components/Header'
+import Header, {Filtro} from '../components/Header'
 import Hero from '../components/Hero'
 import Movies, {Item} from '../components/Movies'
 import api from '../assets/movies.json'
@@ -56,27 +56,32 @@ const itemDestaqueDefault: Item = {
   }
 
 export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
-  const { navigation, route } = props;
+  const { navigation, route } = props
   
-  const { perfil } = useContext(TempStore);
+  const { perfil } = useContext(TempStore)
   
-  const [itensRecomendados, setItensRecomendados] = useState(() => api);
+  const [itensRecomendados, setItensRecomendados] = useState(() => api)
   const [itensTop10, setItensTop10] = useState(() => api)
   const [continuarAssisindo, setContinuarAssisindo] = useState([])
   const [destaque, setDestaque] = useState(itemDestaqueDefault)
+  const [filtro, setFiltro] = useState(null)
   
   function atualizarContinuarAssistindo(){
     if(!perfil) return;
-    console.log('api movies cache', apiMoviesCache)
     // @ts-ignore
     const moviesArr = apiMoviesCache[perfil.name]
     if(moviesArr && moviesArr.length > 0){
-      setContinuarAssisindo(moviesArr)
+      if (!!filtro){
+        setContinuarAssisindo(moviesArr.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
+      } else {
+        setContinuarAssisindo(moviesArr)
+      }
     }
   }
   
   function atualizarDestaque() {
-    const itemAleatorio: Item = api[Math.floor(Math.random() * api.length)]
+    const arr = !!filtro ? api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : api
+    const itemAleatorio: Item = arr[Math.floor(Math.random() * arr.length)]
     setDestaque(itemAleatorio)
   }
   
@@ -86,7 +91,8 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
       if(!item.imdbRating) return false;
       return Number(item.imdbRating) >= 7.5;
     });
-    if(itensR.length > 0){
+    const arr = !!filtro ? itensR.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : itensR
+    if(arr.length > 0){
       setItensRecomendados(itensR.sort((a, b) => {
         if(a.imdbRating > b.imdbRating) return -1;
         if(a.imdbRating < b.imdbRating) return 1;
@@ -95,11 +101,21 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     }
   }
   
+  function atualizarTop10(){
+    if(!filtro) return;
+    setItensTop10(api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
+  }
+  
   useEffect(() => {
     atualizarContinuarAssistindo()
     atualizarDestaque();
     atualizarRecomendados();
-  }, []);
+    atualizarTop10()
+  }, [filtro])
+  
+  function changeFilter(value: Filtro){
+    setFiltro(value)
+  }
 
   return (
     <>
@@ -118,7 +134,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
               'rgba(0,0,0,0.0)',
               'rgba(0,0,0,1)',
             ]}>
-            <Header navigation={navigation} perfil={perfil} />
+            <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} />
             <Hero item={destaque} />
           </Gradient>
         </Poster>
@@ -126,7 +142,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
           <Movies label="Continuar assitindo" itens={continuarAssisindo} />
         }
         <Movies label="Recomendados" itens={itensRecomendados} />
-        <Movies label="Top 10" itens={itensTop10} />
+        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `Top 10`} itens={itensTop10} />
       </Container>
     </>
   );
