@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components/native';
 import Avatar from '../components/Avatar';
 import {Alert, AsyncStorage, Text} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 import { auth } from '../config/firebase'
+import TempStore from '../navigation/tempStore'
 
 const Screen = styled.View`
   flex: 1;
@@ -100,8 +101,8 @@ const replaceAvatarsWithImage = (props, profilesAvailables) => {
   }
 };
 
-const selectProfile = (navigation, item) => {
-  navigation.navigate('Home', {perfil: item});
+const selectProfile = (navigation, item, initialProfile) => {
+  navigation.navigate(!!initialProfile ? 'Root' : 'Home', {perfil: item});
 };
 
 const editProfile = (navigation, profiles) => {
@@ -110,7 +111,9 @@ const editProfile = (navigation, profiles) => {
 
 const More = (props) => {
   replaceAvatarsWithImage(props, profilesAvailables);
-
+  const { perfil, setPerfil } = useContext(TempStore);
+  
+  
   return (
     <Screen>
       <AvantarsContainer>
@@ -122,7 +125,10 @@ const More = (props) => {
                 image={item.icon}
                 uri={item.uri}
                 name={item.name}
-                onPress={() => selectProfile(props.navigation, item)}
+                onPress={() => {
+                  setPerfil(item)
+                  selectProfile(props.navigation, item, perfil)
+                }}
               />
             );
           })}

@@ -18,15 +18,19 @@ import More from '../screens/MoreScreen'
 import ChooseIcon from '../screens/ChooseIconScreen'
 import CameraScreen from '../screens/CameraScreen'
 import AuthPage from '../screens/AuthScreen'
+import TempStore from './tempStore'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const [perfil, setPerfil] = React.useState('teste')
   const authenticated = AsyncStorage.getItem('authenticated');
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <TempStore.Provider value={{ perfil, setPerfil }}>
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <RootNavigator authenticated={authenticated} />
-    </NavigationContainer>
+      </NavigationContainer>
+    </TempStore.Provider>
   );
 }
 
@@ -38,15 +42,14 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({authenticated}) {
   return (
-    <Stack.Navigator initialRouteName={authenticated ? 'AuthPage' : 'AuthPage'}>
+    <Stack.Navigator initialRouteName={authenticated ? 'More' : 'AuthPage'}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="ProfileToEdit" component={ProfileToEdit} options={{ headerShown: false }} />
       <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
       <Stack.Screen name="AuthPage" component={AuthPage} options={{ headerShown: false }} />
       <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
-      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}  />
-      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera' }} />
+      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera' }}  />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

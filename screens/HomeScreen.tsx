@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {Dimensions, StatusBar, StyleSheet} from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import { RootTabScreenProps } from '../types';
@@ -8,6 +8,7 @@ import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Movies, {Item} from '../components/Movies'
 import api from '../assets/movies.json';
+import TempStore from '../navigation/tempStore'
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -53,12 +54,14 @@ const itemDestaqueDefault: Item = {
     "Response": "True"
   }
 
-export default function HomeScreen({ navigation, route }: RootTabScreenProps<'Home'>) {
+export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
+  const { navigation, route } = props;
+  
+  const { perfil } = useContext(TempStore);
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api);
   const [itensTop10, setItensTop10] = useState(() => api)
   const [destaque, setDestaque] = useState(itemDestaqueDefault)
-  const perfil = route?.params?.perfil
   
   function atualizarDestaque() {
     const itemAleatorio: Item = api[Math.floor(Math.random() * api.length)]
