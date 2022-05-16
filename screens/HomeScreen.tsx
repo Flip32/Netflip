@@ -1,13 +1,14 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Dimensions, StatusBar, StyleSheet} from 'react-native';
-import {LinearGradient} from 'expo-linear-gradient';
-import { RootTabScreenProps } from '../types';
+import {Dimensions, StatusBar, StyleSheet} from 'react-native'
+import {LinearGradient} from 'expo-linear-gradient'
+import { RootTabScreenProps } from '../types'
 import styled from 'styled-components/native'
-import { Text, View } from '../components/Themed';
+import { Text, View } from '../components/Themed'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
 import Movies, {Item} from '../components/Movies'
-import api from '../assets/movies.json';
+import api from '../assets/movies.json'
+import apiMoviesCache from '../assets/movieToResume.json'
 import TempStore from '../navigation/tempStore'
 
 const Container = styled.ScrollView`
@@ -61,7 +62,18 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api);
   const [itensTop10, setItensTop10] = useState(() => api)
+  const [continuarAssisindo, setContinuarAssisindo] = useState([])
   const [destaque, setDestaque] = useState(itemDestaqueDefault)
+  
+  function atualizarContinuarAssistindo(){
+    if(!perfil) return;
+    console.log('api movies cache', apiMoviesCache)
+    // @ts-ignore
+    const moviesArr = apiMoviesCache[perfil.name]
+    if(moviesArr && moviesArr.length > 0){
+      setContinuarAssisindo(moviesArr)
+    }
+  }
   
   function atualizarDestaque() {
     const itemAleatorio: Item = api[Math.floor(Math.random() * api.length)]
@@ -84,6 +96,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }
   
   useEffect(() => {
+    atualizarContinuarAssistindo()
     atualizarDestaque();
     atualizarRecomendados();
   }, []);
@@ -109,6 +122,9 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
             <Hero item={destaque} />
           </Gradient>
         </Poster>
+        { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
+          <Movies label="Continuar assitindo" itens={continuarAssisindo} />
+        }
         <Movies label="Recomendados" itens={itensRecomendados} />
         <Movies label="Top 10" itens={itensTop10} />
       </Container>
