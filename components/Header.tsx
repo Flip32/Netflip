@@ -23,7 +23,7 @@ const Container = styled.View`
   margin-top: 10px;
 `;
 
-const Logo = styled.Image`
+export const Logo = styled.Image`
   width: 20px;
   height: 40px;
 `;

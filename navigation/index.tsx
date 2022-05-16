@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import {ColorSchemeName, Pressable, SafeAreaView, StatusBar} from 'react-native';
+import {AsyncStorage, ColorSchemeName, Pressable, SafeAreaView, StatusBar} from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -17,13 +17,15 @@ import ProfileToEdit from '../screens/ProfileToEditScreen'
 import More from '../screens/MoreScreen'
 import ChooseIcon from '../screens/ChooseIconScreen'
 import CameraScreen from '../screens/CameraScreen'
+import AuthPage from '../screens/AuthScreen'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const authenticated = AsyncStorage.getItem('authenticated');
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootNavigator />
+        <RootNavigator authenticated={authenticated} />
     </NavigationContainer>
   );
 }
@@ -34,14 +36,16 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+function RootNavigator({authenticated}) {
   return (
-    <Stack.Navigator >
+    <Stack.Navigator initialRouteName={authenticated ? 'AuthPage' : 'AuthPage'}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="ProfileToEdit" component={ProfileToEdit} options={{ headerShown: false }} />
       <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
+      <Stack.Screen name="AuthPage" component={AuthPage} options={{ headerShown: false }} />
       <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}  />
       <Stack.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
@@ -61,7 +65,7 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Menu"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>

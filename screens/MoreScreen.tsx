@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import Avatar from '../components/Avatar';
-import {View} from 'react-native';
+import {Alert, AsyncStorage, Text} from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
+import { auth } from '../config/firebase'
 
 const Screen = styled.View`
   flex: 1;
@@ -71,6 +72,16 @@ let profilesAvailables: Profile[] = [
   },
 ];
 
+async function logout(navigation: any) {
+  try{
+    await auth.signOut();
+    await AsyncStorage.clear();
+    navigation.navigate('Auth');
+  } catch (e) {
+    Alert.alert('Erro ao sair', e.message);
+  }
+}
+
 const replaceAvatarsWithImage = (props, profilesAvailables) => {
   if (props.route?.params?.name) {
     profilesAvailables.map((item) => {
@@ -122,6 +133,7 @@ const More = (props) => {
         <MaterialIcons name="edit" size={24} color="gray" />
         <ButtonLabel>Gerenciar perfis</ButtonLabel>
       </NetflixButton>
+      <Text onPress={() => logout(props.navigation)} style={{ color: '#FFF', alignSelf: 'center', position: 'absolute', bottom: 30 }}>Sair</Text>
     </Screen>
   );
 };
