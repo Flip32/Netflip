@@ -86,7 +86,7 @@ const AuthPage = (props) => {
                 label={'Email'}
                 mode={'outlined'}
                 error={!!errors.email && touched.email}
-                style={{backgroundColor: '#101010'}}
+                style={{backgroundColor: '#4c4b4b', color: '#fff'}}
                 onChangeText={handleChange("email")}
                 onBlur={() => handleBlur('email')}
                 autoCapitalize={'none'}
@@ -98,7 +98,7 @@ const AuthPage = (props) => {
                 label={'Senha'}
                 mode={'outlined'}
                 error={!!errors.password && touched.password}
-                style={{backgroundColor: '#101010'}}
+                style={{backgroundColor: '#4c4b4b', color: '#fff'}}
                 onChangeText={handleChange("password")}
                 onBlur={() => handleBlur('password')}
                 secureTextEntry
