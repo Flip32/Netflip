@@ -72,7 +72,7 @@ const AuthPage = (props) => {
     return (
       <View style={styles.formContainer}>
         <Formik
-          initialValues={{ email: 'teste@email.com', password: '123456' }}
+          initialValues={{ email: '', password: '' }}
           onSubmit={async (values) => {
             await login(values)
             // actions.setSubmitting(false)
@@ -86,7 +86,7 @@ const AuthPage = (props) => {
                 label={'Email'}
                 mode={'outlined'}
                 error={!!errors.email && touched.email}
-                style={{backgroundColor: 'white'}}
+                style={{backgroundColor: '#101010'}}
                 onChangeText={handleChange("email")}
                 onBlur={() => handleBlur('email')}
                 autoCapitalize={'none'}
@@ -98,7 +98,7 @@ const AuthPage = (props) => {
                 label={'Senha'}
                 mode={'outlined'}
                 error={!!errors.password && touched.password}
-                style={{backgroundColor: 'white'}}
+                style={{backgroundColor: '#101010'}}
                 onChangeText={handleChange("password")}
                 onBlur={() => handleBlur('password')}
                 secureTextEntry
