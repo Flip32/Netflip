@@ -92,7 +92,7 @@ function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           headerShown: false,
-          title: 'Em Brenve',
+          title: 'Soon',
           tabBarIcon: ({ color }) => <TabBarIcon name="folder" color={color} />,
         }}
       />

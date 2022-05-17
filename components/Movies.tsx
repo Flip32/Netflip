@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Dimensions, Image, TouchableWithoutFeedback} from 'react-native';
+import Animated from "react-native-reanimated";
 import {useSpring, animated} from 'react-spring';
 import styled from 'styled-components/native';
 
@@ -82,6 +83,7 @@ const Movies = (props: Movies) => {
       scale: 1,
     },
   });
+  
 
   return (
     <Container>
@@ -97,11 +99,19 @@ const Movies = (props: Movies) => {
                 onPressIn={() => {
                   setPressedIn({pressed: true, index: index});
                 }}>
-                <AnimatedMoviePoster
-                  // style={index === pressing.index ? {transform: [translate]} : null}
-                  resizeMode="cover"
-                  source={{  uri: movie.Poster }}
-                />
+                <Animated.View
+                  style=
+                    {index === pressing.index
+                         ? { transform: [{ scaleX: 1.1 }, { scaleY: 1.1 }], zIndex: 999 }
+                         : null
+                  }
+                >
+                  <MoviePoster
+                    style={index === pressing.index ? {} : null}
+                    resizeMode="cover"
+                    source={{  uri: movie.Poster }}
+                  />
+                </Animated.View>
               </TouchableWithoutFeedback>
             </MovieCard>
           );
