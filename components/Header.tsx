@@ -46,6 +46,7 @@ type Header = {
 
 const Header = (props: Header) => {
   const { perfil, navigation, callBackFilter } = props;
+  console.log('perfil no header', perfil)
   return (
     <Container>
       <Menu onPress={() => callBackFilter(null)}>
@@ -66,9 +67,11 @@ const Header = (props: Header) => {
       <Pressable
         onPress={() => navigation.navigate('More')}
       >
-        <AvatarIcon
-          source={perfil.icon}
-        />
+        {
+          perfil.uri
+            ? <AvatarIcon source={{ uri: perfil.uri }} />
+            : <AvatarIcon source={perfil.icon} />
+        }
       </Pressable>
     </Container>
   );

@@ -88,6 +88,7 @@ const replaceAvatarsWithImage = (props, profilesAvailables) => {
     profilesAvailables.map((item) => {
       if (item.name === props.route.params.name) {
         if (props.route?.params?.image) {
+          item.icon = null
           item.uri = props.route.params.image;
           item.image = null;
         }

@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Linking, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {Alert, Linking, StyleSheet, TouchableOpacity, View, Text,} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from "expo-image-manipulator";
-import {Avatar} from 'react-native-paper'
+import {ActivityIndicator, Avatar, Modal, Portal} from 'react-native-paper'
 import {saveAvatarOnStorage} from '../service/firestore'
 
 const imagePickerConfig: any = {
@@ -85,6 +85,7 @@ const CameraScreen = (props: any) => {
   
   const [image, setImage] = useState(null)
   const name = props.route.params.name;
+  const [loading, setLoading] = useState(false)
   
   useEffect(() => {
     async function inicia() {
@@ -102,42 +103,65 @@ const CameraScreen = (props: any) => {
   }
   
   return (
-    <View style={styles.container}>
-      {
-        image &&
-        <View style={styles.imageContainer}>
-          <Avatar.Image size={150} source={{uri: image.uri}}/>
-        </View>
-      }
-      <TouchableOpacity
-        onPress={async () => {
-          const picture = await takePictureFromCamera({ cameraType: 'front', aspect: [3, 4] })
-          if(!picture.cancelled) {
-            setImage(picture)
-          }
-        }}
-        style={[ styles.button, styles.buttonTakePicture]}>
-        <Text style={styles.buttonLAbel}>{image ? 'Tirar outra' : 'Abrir câmera'}</Text>
-      </TouchableOpacity>
-      {
-        image &&
+    <>
+      <View style={styles.container}>
+        {
+          image &&
+          <View style={styles.imageContainer}>
+            <Avatar.Image size={150} source={{uri: image.uri}}/>
+          </View>
+        }
         <TouchableOpacity
-          style={[ styles.button, styles.buttonTakeUseAvatar]}
           onPress={async () => {
-            const url = await saveAvatarOnStorage(image, name)
-            if(url){
-              props.navigation.navigate('More', {
-                icon: null,
-                name: name,
-                image: url,
-              });
+            setLoading(true)
+            try{
+              const picture = await takePictureFromCamera({ cameraType: 'front', aspect: [3, 4] })
+              if(!picture.cancelled) {
+                setImage(picture)
+              }
+              setLoading(false)
+            } catch (e) {
+              Alert.alert('Erro', 'Não foi possível tirar a foto')
+              setLoading(false)
             }
           }}
-        >
-          <Text style={styles.buttonLAbel}>Usar como Avatar</Text>
+          style={[ styles.button, styles.buttonTakePicture]}>
+          <Text style={styles.buttonLAbel}>{image ? 'Tirar outra' : 'Abrir câmera'}</Text>
         </TouchableOpacity>
-      }
-    </View>
+        {
+          image &&
+          <TouchableOpacity
+            style={[ styles.button, styles.buttonTakeUseAvatar]}
+            onPress={async () => {
+              setLoading(true)
+              let url
+              try{
+                url = await saveAvatarOnStorage(image, name)
+                setLoading(false)
+              } catch (e) {
+                Alert.alert('Erro', 'Não foi possível salvar a foto')
+                setLoading(false)
+              }
+              
+              if(url){
+                props.navigation.navigate('More', {
+                  icon: null,
+                  name: name,
+                  image: url,
+                });
+              }
+            }}
+          >
+            <Text style={styles.buttonLAbel}>Usar como Avatar</Text>
+          </TouchableOpacity>
+        }
+      </View>
+      <Portal>
+        <Modal visible={loading}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </Modal>
+      </Portal>
+    </>
   )
 }
 
