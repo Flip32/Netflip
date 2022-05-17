@@ -1,9 +1,12 @@
 import firebase from 'firebase/compat'
-import {database} from '../config/firebase'
+import {auth, database} from '../config/firebase'
+
+
 
 export const currentFirebaseUser = () => {
   return new Promise((resolve, reject) => {
-    let unsubscribe = null; unsubscribe = firebase.auth().onAuthStateChanged(
+    let unsubscribe = null;
+    unsubscribe = firebase.auth().onAuthStateChanged(
       (user) => resolve(user),
       (error) => reject(error),
       () => unsubscribe()
@@ -41,4 +44,8 @@ export const removeItemOnList = async (item, usuario, lista, callback) => {
   const user = await currentFirebaseUser()
   await database.collection(`${user.uid}`).doc(`${usuario.name}_minhaLista`).set(newList)
   callback()
+}
+
+export const singIn = async (email, password) => {
+  return auth.signInWithEmailAndPassword(email, password)
 }

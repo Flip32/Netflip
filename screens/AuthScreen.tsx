@@ -6,7 +6,8 @@ import { Logo } from '../components/Header'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import { auth } from '../config/firebase'
+import {auth, LOCAL_KEY} from '../config/firebase'
+import {singIn} from '../service/firestore'
 
 const HeaderAuth = styled.View`
   align-items: center;
@@ -38,9 +39,8 @@ const AuthPage = (props) => {
   
   async function login(values: LoginForm) {
     const {email, password} = values
-    console.log(email, password)
     try{
-      const log = await auth.signInWithEmailAndPassword(email, password)
+      const log = await singIn(email, password)
       if(!log){
         throw new Error('User not found')
       }
@@ -57,7 +57,7 @@ const AuthPage = (props) => {
                   routes: [{name: 'More'}],
                 }),
               )
-              AsyncStorage.setItem('authenticated', log.user.uid)
+              AsyncStorage.setItem('user', `${email}-${password}`)
             }},
         ],
       );
@@ -72,7 +72,7 @@ const AuthPage = (props) => {
     return (
       <View style={styles.formContainer}>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ email: 'teste@email.com', password: '123456' }}
           onSubmit={async (values) => {
             await login(values)
             // actions.setSubmitting(false)

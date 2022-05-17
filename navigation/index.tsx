@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import {AsyncStorage, ColorSchemeName, Pressable, SafeAreaView, StatusBar} from 'react-native';
+import {AsyncStorage, ColorSchemeName, Pressable, SafeAreaView, StatusBar, View} from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -19,10 +19,39 @@ import ChooseIcon from '../screens/ChooseIconScreen'
 import CameraScreen from '../screens/CameraScreen'
 import AuthPage from '../screens/AuthScreen'
 import TempStore from './tempStore'
+import InitialPage from '../screens/initialPage'
+import {singIn} from '../service/firestore'
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const [perfil, setPerfil] = React.useState('teste')
-  const authenticated = AsyncStorage.getItem('authenticated');
+  const [authenticated, setAuthenticated] = React.useState<boolean|null>(null)
+  
+  async function useLogged(){
+    const persisted = await AsyncStorage.getItem('user');
+    try{
+      if(!!persisted){
+        const email = persisted.split('-')[0]
+        const password = persisted.split('-')[1]
+        const log = await singIn(email, password)
+        if(log?.user.uid){
+          console.log('ta caindo aqui dentro')
+          setAuthenticated(true)
+        } else {
+          setAuthenticated(false)
+        }
+      } else {
+        setAuthenticated(false)
+      }
+    } catch (e) {
+      console.log('Deui ruim ao tentar logar', e)
+      setAuthenticated(false)
+    }
+  }
+  
+  React.useEffect(() => {
+    useLogged().then()
+  }, [])
+  
   return (
     <TempStore.Provider value={{ perfil, setPerfil }}>
       <NavigationContainer
@@ -41,11 +70,15 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator({authenticated}) {
+  if(authenticated === null){
+    return <InitialPage/>
+  }
   return (
-    <Stack.Navigator initialRouteName={authenticated ? 'More' : 'AuthPage'}>
+    <Stack.Navigator initialRouteName={!!authenticated ? 'More' : 'AuthPage'}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Screen name="ProfileToEdit" component={ProfileToEdit} options={{ headerShown: false }} />
+      {/*<Stack.Screen name="InitialPage" component={InitialPage} options={{ headerShown: false }} />*/}
       <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
       <Stack.Screen name="AuthPage" component={AuthPage} options={{ headerShown: false }} />
       <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
