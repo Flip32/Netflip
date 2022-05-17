@@ -70,16 +70,11 @@ export const saveAvatarOnStorage = async (avatar, name: string) => {
   
   const uri = await avatar.uri;
   const childPath = `${user.uid}/avatars/${name}_avatar`;
-  const reference = ref(storage, childPath);
-  
-  const response = await fetch(uri);
-  
-  const blob = await response.blob();
-  
-  const task = await uploadBytes(reference, blob);
-  
-  const downloadURL =  await getDownloadURL(reference);
-  console.log('url', downloadURL)
+  const reference = ref(storage, childPath)
+  const response = await fetch(uri)
+  const blob = await response.blob()
+  const task = await uploadBytes(reference, blob)
+  const downloadURL =  await getDownloadURL(reference)
   await saveAvatarOnDB(downloadURL, name)
   return downloadURL;
 }

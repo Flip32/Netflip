@@ -60,9 +60,6 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const { navigation, route } = props
   
   const { perfil } = useContext(TempStore)
-  console.log('========================================')
-  console.log('perfil na home', perfil)
-  console.log('========================================')
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api)
   const [itensTop10, setItensTop10] = useState(() => api)

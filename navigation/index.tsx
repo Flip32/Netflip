@@ -34,7 +34,6 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
         const password = persisted.split('-')[1]
         const log = await singIn(email, password)
         if(log?.user.uid){
-          console.log('ta caindo aqui dentro')
           setAuthenticated(true)
         } else {
           setAuthenticated(false)

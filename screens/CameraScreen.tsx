@@ -62,9 +62,7 @@ export async function takePictureFromCamera(customConfig?: any) {
     let picture: any = await ImagePicker.launchCameraAsync({...imagePickerConfig, ...customConfig});
     
     if (!picture.cancelled) {
-      // console.log("DEBUG BOLADO >>>>>> picture", picture);
       const imageResult = await resizePicture(picture);
-      // console.log("DEBUG BOLADO >>>>>> imageResult", imageResult);
       return imageResult;
     } else {
       return picture;

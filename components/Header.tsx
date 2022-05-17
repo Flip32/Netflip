@@ -45,8 +45,7 @@ type Header = {
 }
 
 const Header = (props: Header) => {
-  const { perfil, navigation, callBackFilter } = props;
-  console.log('perfil no header', perfil)
+  const { perfil, navigation, callBackFilter } = props
   return (
     <Container>
       <Menu onPress={() => callBackFilter(null)}>
