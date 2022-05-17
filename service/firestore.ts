@@ -1,6 +1,7 @@
-import firebase from 'firebase/compat'
-import {auth, database} from '../config/firebase'
-
+import firebase from 'firebase/compat/app'
+import {auth, database, appInitilizer} from '../config/firebase'
+import 'firebase/storage';
+import { getStorage, uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 
 
 export const currentFirebaseUser = () => {
@@ -48,4 +49,37 @@ export const removeItemOnList = async (item, usuario, lista, callback) => {
 
 export const singIn = async (email, password) => {
   return auth.signInWithEmailAndPassword(email, password)
+}
+
+export const getAvatarFromDB = async (name: string) => {
+  const user = await currentFirebaseUser()
+  const userRef = database.collection(`${user.uid}`).doc(`${name}_avatar`)
+  const doc = await userRef.get()
+  return doc.data()
+}
+
+export const saveAvatarOnDB = async (url: string, name: string) => {
+  const user = await currentFirebaseUser()
+  await database.collection(`${user.uid}`).doc(`${name}_avatar`).set({url})
+}
+
+export const saveAvatarOnStorage = async (avatar, name: string) => {
+  const user = await currentFirebaseUser()
+  
+  const storage = getStorage();
+  
+  const uri = await avatar.uri;
+  const childPath = `${user.uid}/avatars/${name}_avatar`;
+  const reference = ref(storage, childPath);
+  
+  const response = await fetch(uri);
+  
+  const blob = await response.blob();
+  
+  const task = await uploadBytes(reference, blob);
+  
+  const downloadURL =  await getDownloadURL(reference);
+  console.log('url', downloadURL)
+  await saveAvatarOnDB(downloadURL, name)
+  return downloadURL;
 }

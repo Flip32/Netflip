@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Alert, Linking, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from "expo-image-manipulator";
+import {Avatar} from 'react-native-paper'
+import {saveAvatarOnStorage} from '../service/firestore'
 
 const imagePickerConfig: any = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -81,6 +83,9 @@ export async function takePictureFromCamera(customConfig?: any) {
 
 const CameraScreen = (props: any) => {
   
+  const [image, setImage] = useState(null)
+  const name = props.route.params.name;
+  
   useEffect(() => {
     async function inicia() {
       await load()
@@ -98,18 +103,40 @@ const CameraScreen = (props: any) => {
   
   return (
     <View style={styles.container}>
+      {
+        image &&
+        <View style={styles.imageContainer}>
+          <Avatar.Image size={150} source={{uri: image.uri}}/>
+        </View>
+      }
       <TouchableOpacity
         onPress={async () => {
           const picture = await takePictureFromCamera({ cameraType: 'front', aspect: [3, 4] })
           if(!picture.cancelled) {
-            props.onPictureTaken(picture)
+            setImage(picture)
           }
         }}
-        style={styles.successContainer}
-        {...props.store.testIds('cadastro_selfie_abrir_camera')}
-      >
-        <Text>Abrir câmera</Text>
+        style={[ styles.button, styles.buttonTakePicture]}>
+        <Text style={styles.buttonLAbel}>{image ? 'Tirar outra' : 'Abrir câmera'}</Text>
       </TouchableOpacity>
+      {
+        image &&
+        <TouchableOpacity
+          style={[ styles.button, styles.buttonTakeUseAvatar]}
+          onPress={async () => {
+            const url = await saveAvatarOnStorage(image, name)
+            if(url){
+              props.navigation.navigate('More', {
+                icon: null,
+                name: name,
+                image: url,
+              });
+            }
+          }}
+        >
+          <Text style={styles.buttonLAbel}>Usar como Avatar</Text>
+        </TouchableOpacity>
+      }
     </View>
   )
 }
@@ -117,6 +144,17 @@ const CameraScreen = (props: any) => {
 export default CameraScreen;
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
-  successContainer: { alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginVertical: 20 },
+  container: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    marginBottom: 20,
+    borderRadius: 4,
+    padding: 12,
+  },
+  buttonTakePicture: {  backgroundColor: '#252525' },
+  buttonTakeUseAvatar: { backgroundColor: '#220068' },
+  buttonLAbel: { color: '#FFF', fontSize: 18 },
+  imageContainer: { marginBottom: 40 },
 })

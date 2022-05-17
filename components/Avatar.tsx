@@ -51,7 +51,7 @@ const Editable = (props) => {
 };
 
 const Avatar = (props) => {
-  // console.log('avatar', props);
+  console.log('avatar props', props);
   return (
     <Container style={{alignItems: 'center'}} onPress={props.onPress}>
       {props.uri ? (
