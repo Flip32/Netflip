@@ -76,8 +76,8 @@ let profilesAvailables: Profile[] = [
 async function logout(navigation: any) {
   try{
     await auth.signOut();
-    await AsyncStorage.clear();
-    navigation.navigate('Auth');
+    await AsyncStorage.setItem('authenticated', 'false');
+    navigation.navigate('AuthPage');
   } catch (e) {
     Alert.alert('Erro ao sair', e.message);
   }

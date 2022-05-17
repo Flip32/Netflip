@@ -89,6 +89,7 @@ const AuthPage = (props) => {
                 style={{backgroundColor: 'white'}}
                 onChangeText={handleChange("email")}
                 onBlur={() => handleBlur('email')}
+                autoCapitalize={'none'}
               />
               { !!errors.email && touched.email && <HelperText style={styles.error}>{errors.email}</HelperText> }
   

@@ -10,6 +10,7 @@ import Movies, {Item} from '../components/Movies'
 import api from '../assets/movies.json'
 import apiMoviesCache from '../assets/movieToResume.json'
 import TempStore from '../navigation/tempStore'
+import { getMinhaLista} from '../service/firestore'
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -65,6 +66,8 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const [continuarAssisindo, setContinuarAssisindo] = useState([])
   const [destaque, setDestaque] = useState(itemDestaqueDefault)
   const [filtro, setFiltro] = useState(null)
+  const [minhaLista, setMinhaLista] = useState()
+  const [itensMinhaLista, setItensMinhaLista] = useState([])
   
   function atualizarContinuarAssistindo(){
     if(!perfil) return;
@@ -106,12 +109,43 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     setItensTop10(api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
   }
   
+  async function atualizarMinhaLista(){
+    const lista = await getMinhaLista(perfil.name)
+    if(!!lista && lista !== {}){
+      setMinhaLista(lista)
+    }
+  }
+  
   useEffect(() => {
     atualizarContinuarAssistindo()
     atualizarDestaque();
     atualizarRecomendados();
     atualizarTop10()
   }, [filtro])
+  
+  useEffect(() => {
+      atualizarMinhaLista().then()
+  }, [])
+  
+  useEffect(() => {
+    if(!minhaLista || minhaLista === {}) return;
+      // filtrar api com array de imdbID da minhaLista
+    const arr = []
+    const arrIDs = []
+    Object.keys(minhaLista).forEach(key => {
+      arrIDs.push(...minhaLista[key])
+    })
+    
+    arrIDs.forEach(id => {
+      const newItem = api.find(itemApi => itemApi.imdbID === id)
+      if(!newItem) return;
+      arr.push(newItem)
+    })
+
+    if(arr.length > 0){
+      setItensMinhaLista(arr)
+    }
+  }, [minhaLista])
   
   function changeFilter(value: Filtro){
     setFiltro(value)
@@ -135,11 +169,15 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
               'rgba(0,0,0,1)',
             ]}>
             <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} />
-            <Hero item={destaque} />
+            <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} />
           </Gradient>
         </Poster>
         { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
           <Movies label="Continuar assitindo" itens={continuarAssisindo} />
+        }
+        {
+          (!!itensMinhaLista && itensMinhaLista.length > 0) &&
+          <Movies label="MinhaLista" itens={itensMinhaLista} />
         }
         <Movies label="Recomendados" itens={itensRecomendados} />
         <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `Top 10`} itens={itensTop10} />

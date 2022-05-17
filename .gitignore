@@ -16,4 +16,4 @@ web-build/
 
 ./config/firebase.js
 ./config/firebase.*
-config/firebase.js
+config/firebase.ts

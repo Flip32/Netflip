@@ -1,9 +1,11 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useContext, useState} from 'react';
 import styled from 'styled-components/native';
 
 import {Feather, Ionicons} from '@expo/vector-icons';
 import {useSpring, animated} from 'react-spring';
 import {Item} from './Movies'
+import {removeItemOnList, saveItemOnList} from '../service/firestore'
+import TempStore from '../navigation/tempStore'
 
 const Container = styled.View`
   position: absolute;
@@ -88,10 +90,14 @@ const TextButtonPlay = styled.Text`
 
 type Hero = {
   item: Item
+  lista: any
 };
 
 const Hero = (props: Hero) => {
-  const {item} = props;
+  const { item, lista, callbackUpdateHome } = props;
+  const { perfil } = useContext(TempStore);
+  const tipo = item.Type
+  const itemSaved = !!tipo && !!lista ? lista[tipo]?.find(i => i === item.imdbID) : null
   
   const renderTags = () => {
     const tags = item.Genre
@@ -123,8 +129,14 @@ const Hero = (props: Hero) => {
         renderTags()
       }
       <MenuHero>
-        <Button>
-          <Feather name="plus" size={26} color="#FFF" />
+        <Button onPress={async () => {
+          if(!!itemSaved) {
+            await removeItemOnList(item, perfil, lista, callbackUpdateHome)
+          } else {
+            await saveItemOnList(item, perfil, lista, callbackUpdateHome)
+          }
+        }}>
+          <Feather name={!!itemSaved ? 'check' : 'plus'} size={26} color="#FFF" />
           <TextButton>Minha lista</TextButton>
         </Button>
 

@@ -48,9 +48,9 @@ const Header = (props: Header) => {
   const { perfil, navigation, callBackFilter } = props;
   return (
     <Container>
-      <Pressable onPress={() => navigation.navigate('Home')}>
+      <Menu onPress={() => callBackFilter(null)}>
         <Logo onPress={() => callBackFilter(null)} resizeMode="contain" source={require('../assets/logo.png')} />
-      </Pressable>
+      </Menu>
       
       <Menu onPress={() => callBackFilter('series')} >
         <Label>Séries</Label>
@@ -60,9 +60,9 @@ const Header = (props: Header) => {
         <Label>Filmes</Label>
       </Menu>
       
-      <Menu onPress={() => {}}>
+      {/*<Menu onPress={() => {}}>
         <Label>Minha lista</Label>
-      </Menu>
+      </Menu>*/}
       <Pressable
         onPress={() => navigation.navigate('More')}
       >
