@@ -14,16 +14,45 @@ import SearchScreen from '../screens/SearchScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import ProfileToEdit from '../screens/ProfileToEditScreen'
-import More from '../screens/MoreScreen'
+import More, {Profile} from '../screens/MoreScreen'
 import ChooseIcon from '../screens/ChooseIconScreen'
 import CameraScreen from '../screens/CameraScreen'
 import AuthPage from '../screens/AuthScreen'
 import TempStore from './tempStore'
 import InitialPage from '../screens/initialPage'
-import {singIn} from '../service/firestore'
+import {getAllAvatarsFromDB, getAvatarFromDB, singIn} from '../service/firestore'
+
+let profilesAvailablesInitial: Profile[] = [
+  {
+    icon: require('../assets/avatars/avatar1.png'),
+    name: 'José',
+    uri: null,
+  },
+  {
+    icon: require('../assets/avatars/avatar2.png'),
+    name: 'Luiz',
+    uri: null,
+  },
+  {
+    icon: require('../assets/avatars/avatar3.png'),
+    name: 'João',
+    uri: null,
+  },
+  {
+    icon: require('../assets/avatars/avatar4.png'),
+    name: 'Maria',
+    uri: null,
+  },
+  {
+    icon: require('../assets/avatars/avatar5.png'),
+    name: 'Pedro',
+    uri: null,
+  },
+];
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const [perfil, setPerfil] = React.useState('teste')
+  const [profilesAvailables, setProfilesAvailables] = React.useState<Profile[]>(profilesAvailablesInitial)
   const [authenticated, setAuthenticated] = React.useState<boolean|null>(null)
   
   async function useLogged(){
@@ -34,6 +63,17 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
         const password = persisted.split('-')[1]
         const log = await singIn(email, password)
         if(log?.user.uid){
+          const allAvatarsFromDB = await getAllAvatarsFromDB()
+          if(allAvatarsFromDB && allAvatarsFromDB.length>0){
+            const newProfilesTemp = profilesAvailablesInitial.map(profile => {
+              const avatar = allAvatarsFromDB.find(avatar => avatar.name === profile.name)
+              if(avatar){
+                return {...profile, uri: avatar.url, icon: null}
+              }
+              return profile
+            })
+            setProfilesAvailables(newProfilesTemp)
+          }
           setAuthenticated(true)
         } else {
           setAuthenticated(false)
@@ -52,7 +92,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   }, [])
   
   return (
-    <TempStore.Provider value={{ perfil, setPerfil }}>
+    <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables }}>
       <NavigationContainer
         linking={LinkingConfiguration}
         theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

@@ -45,34 +45,6 @@ export type Profile = {
   uri?: string | null
 }
 
-let profilesAvailables: Profile[] = [
-  {
-    icon: require('../assets/avatars/avatar1.png'),
-    name: 'José',
-    uri: null,
-  },
-  {
-    icon: require('../assets/avatars/avatar2.png'),
-    name: 'Luiz',
-    uri: null,
-  },
-  {
-    icon: require('../assets/avatars/avatar3.png'),
-    name: 'João',
-    uri: null,
-  },
-  {
-    icon: require('../assets/avatars/avatar4.png'),
-    name: 'Maria',
-    uri: null,
-  },
-  {
-    icon: require('../assets/avatars/avatar5.png'),
-    name: 'Pedro',
-    uri: null,
-  },
-];
-
 async function logout(navigation: any) {
   try{
     await auth.signOut();
@@ -111,8 +83,8 @@ const editProfile = (navigation, profiles) => {
 };
 
 const More = (props) => {
+  const { perfil, setPerfil, profilesAvailables } = useContext(TempStore);
   replaceAvatarsWithImage(props, profilesAvailables);
-  const { perfil, setPerfil } = useContext(TempStore);
   
   
   return (
@@ -128,6 +100,7 @@ const More = (props) => {
                 name={item.name}
                 onPress={() => {
                   setPerfil(item)
+                  console.log('perfil ao escolher um ',perfil)
                   selectProfile(props.navigation, item, perfil)
                 }}
               />

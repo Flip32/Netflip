@@ -58,6 +58,22 @@ export const getAvatarFromDB = async (name: string) => {
   return doc.data()
 }
 
+export const getAllAvatarsFromDB = async () => {
+  const namesTemp = ['José', 'Luiz', 'João', 'Maria', 'Pedro']
+  const user = await currentFirebaseUser()
+  const avatars = []
+  for(let name of namesTemp) {
+      const userRef = database.collection(`${user.uid}`).doc(`${name}_avatar`)
+      const doc = await userRef.get()
+      const avatar = doc.data()
+      if(avatar){
+        avatars.push({ name, url: avatar.url })
+      }
+    }
+  console.log('avatars', avatars)
+  return avatars
+}
+
 export const saveAvatarOnDB = async (url: string, name: string) => {
   const user = await currentFirebaseUser()
   await database.collection(`${user.uid}`).doc(`${name}_avatar`).set({url})
