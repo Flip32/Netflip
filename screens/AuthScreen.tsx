@@ -40,13 +40,13 @@ const AuthPage = (props) => {
     const {email, password} = values
     console.log(email, password)
     try{
-      const user = await auth.signInWithEmailAndPassword(email, password)
-      if(!user){
+      const log = await auth.signInWithEmailAndPassword(email, password)
+      if(!log){
         throw new Error('User not found')
       }
       Alert.alert(
         'User Authenticated',
-        `User ${user.user.email} has succesfuly been authenticated!`,
+        `User ${log.user.email} has succesfuly been authenticated!`,
         [
           {
             text: 'OK',
@@ -57,7 +57,7 @@ const AuthPage = (props) => {
                   routes: [{name: 'More'}],
                 }),
               )
-              AsyncStorage.setItem('authenticated', 'true')
+              AsyncStorage.setItem('authenticated', log.user.uid)
             }},
         ],
       );
