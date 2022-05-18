@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View, Text, Alert } from 'react-native'
-import { HelperText, TextInput } from 'react-native-paper'
+import { ActivityIndicator, HelperText, Portal, TextInput, Modal } from 'react-native-paper'
 import { CommonActions } from "@react-navigation/native"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Logo } from '../components/Header'
@@ -19,7 +19,7 @@ const HeaderAuth = styled.View`
   margin-top: 15px;
 `;
 
-const LogoBigContainer = styled.View`
+export const LogoBigContainer = styled.View`
   align-self: center;
   flex-direction: row;
   justify-content: center;
@@ -30,7 +30,7 @@ const LogoBigContainer = styled.View`
   top: 30%;
 `;
 
-const LogoBig = styled.Image`
+export const LogoBig = styled.Image`
   width: 200px;
   height: 100px;
 `;
@@ -38,6 +38,7 @@ const LogoBig = styled.Image`
 const AuthPage = (props) => {
   
   const [showLogin, setShowLogin] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { setProfilesAvailables } = useContext(TempStore)
   
   const schema = Yup.object().shape({
@@ -59,11 +60,13 @@ const AuthPage = (props) => {
     const {email, password} = values
     
     try{
+      setLoading(true)
       const log = await singIn(email, password)
       if(!log){
         throw new Error('User not found')
       }
       await getAllAvatarsFromDB(setProfilesAvailables)
+      setLoading(false)
       Alert.alert(
         'User Authenticated',
         `User ${log.user.email} has succesfuly been authenticated!`,
@@ -82,11 +85,11 @@ const AuthPage = (props) => {
         ],
       );
     } catch (e) {
-      Alert.alert('Login Failed', e.message);
+      Alert.alert('Login Failed', e.message)
+      setLoading(false)
       return console.log('Deu ruim ao fazer login', e)
     }
   }
-  
   
   const formRender = () => {
     return (
@@ -137,47 +140,39 @@ const AuthPage = (props) => {
     )
   }
   
-  useEffect(() => {
-    async function inicia() {
-      await load()
-    }
-    
-    inicia().then(() => {
-    })
-    return () => {
-    }
-  }, [])
-  
-  async function load() {
-  
-  }
-  
   return (
-    <View style={styles.container}>
-      {
-        showLogin &&
-        <HeaderAuth>
-          <Logo resizeMode="contain" source={require('../assets/logo.png')}/>
-        </HeaderAuth>
-      }
-  
-      {
-        !showLogin &&
-        <LogoBigContainer>
-          <LogoBig resizeMode="contain" source={require('../assets/images/icon.png')}/>
-        </LogoBigContainer>
-      }
-      
-      {
-        showLogin && formRender()
-      }
-      {
-        !showLogin &&
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => setShowLogin(true)}>
-          <Text style={styles.buttonLabel}>Entrar</Text>
-        </TouchableOpacity>
-      }
-    </View>
+    <>
+      <View style={styles.container}>
+        {
+          showLogin &&
+          <HeaderAuth>
+            <Logo resizeMode="contain" source={require('../assets/logo.png')}/>
+          </HeaderAuth>
+        }
+    
+        {
+          !showLogin &&
+          <LogoBigContainer>
+            <LogoBig resizeMode="contain" source={require('../assets/images/icon.png')}/>
+          </LogoBigContainer>
+        }
+    
+        {
+          showLogin && formRender()
+        }
+        {
+          !showLogin &&
+          <TouchableOpacity style={styles.buttonContainer} onPress={() => setShowLogin(true)}>
+            <Text style={styles.buttonLabel}>Entrar</Text>
+          </TouchableOpacity>
+        }
+      </View>
+      <Portal>
+        <Modal visible={loading}>
+          <ActivityIndicator size="large" />
+        </Modal>
+      </Portal>
+    </>
   )
 }
 

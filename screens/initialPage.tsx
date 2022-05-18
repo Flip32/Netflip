@@ -1,26 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { LogoBig, LogoBigContainer } from './AuthScreen'
 
-const InitialPAge = (props) => {
-  
-  useEffect(() => {
-    async function inicia() {
-      await load()
-    }
-    
-    inicia().then(() => {
-    })
-    return () => {
-    }
-  }, [])
-  
-  async function load() {
-  
-  }
+const InitialPAge = () => {
   
   return (
     <View style={styles.container}>
-    
+      <LogoBigContainer>
+        <LogoBig resizeMode="contain" source={require('../assets/images/icon.png')}/>
+      </LogoBigContainer>
     </View>
   )
 }
@@ -28,5 +16,5 @@ const InitialPAge = (props) => {
 export default InitialPAge;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#000' }
+  container: { flex: 1 }
 })

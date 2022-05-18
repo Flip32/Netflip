@@ -1,0 +1,80 @@
+{
+  "pt": {
+    "bottomIcons": {
+      "home": "Início",
+      "search": "Buscar",
+      "downloads": "Downloads",
+      "menu": "Menu",
+      "soon": "Novidades"
+    },
+    "headerHome":{
+      "series": "Séries",
+      "movies": "Filmes"
+    },
+    "buttonsInteractive": {
+      "myList": "Minha Lista",
+      "myAccount": "Minha Conta",
+      "logout": "Sair",
+      "login": "Entrar",
+      "register": "Registrar",
+      "More": "Saiba Mais"
+    },
+    "blockTitle": {
+      "keepWatching": "Continue Assistindo",
+      "myList": "Minha Lista",
+      "recommended": "Recomendados",
+      "top10": "Top 10"
+    },
+    "settings": {
+      "editiPerfil": "Gerenciar Perfils",
+      "edit": "Editar"
+    },
+    "pageTitles": {
+      "camera": "Câmera",
+      "home": "Início",
+      "search": "Buscar",
+      "downloads": "Downloads",
+      "menu": "Menu",
+      "soon": "Novidades"
+    }
+  },
+  "en": {
+    "bottomIcons": {
+      "home": "Home",
+      "search": "Search",
+      "downloads": "Downloads",
+      "menu": "Menu",
+      "soon": "News"
+    },
+    "headerHome":{
+      "series": "Series",
+      "movies": "Movies"
+    },
+    "buttonsInteractive": {
+      "myList": "My List",
+      "myAccount": "My Account",
+      "logout": "Logout",
+      "login": "Login",
+      "register": "Register",
+      "More": "More"
+    },
+    "blockTitle": {
+      "keepWatching": "Keep Watching",
+      "myList": "My List",
+      "recommended": "Recommended",
+      "top10": "Top 10"
+    },
+    "settings": {
+      "editiPerfil": "Manage Profiles",
+      "edit": "Edit"
+    },
+    "pageTitles": {
+      "camera": "Camera",
+      "home": "Home",
+      "search": "Search",
+      "downloads": "Downloads",
+      "menu": "Menu",
+      "soon": "News"
+    }
+  }
+}

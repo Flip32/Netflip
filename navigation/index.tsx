@@ -1,8 +1,8 @@
+import React, {useState, useEffect, useContext} from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -22,6 +22,32 @@ import AuthPage from '../screens/AuthScreen'
 import TempStore from './tempStore'
 import InitialPage from '../screens/initialPage'
 import {getAllAvatarsFromDB, singIn} from '../service/firestore'
+import languages from '../assets/languages.json'
+import {Theme} from '@react-navigation/native/src/types'
+
+const LightTheme: Theme = {
+  dark: false,
+  colors: {
+    primary: 'rgb(255, 59, 48)',
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(28, 28, 30)',
+    border: 'rgb(216, 216, 216)',
+    notification: 'rgb(255, 59, 48)',
+  },
+};
+
+const DarkTheme: Theme = {
+  dark: true,
+  colors: {
+    primary: 'rgb(255, 69, 58)',
+    background: 'rgb(76,75,75)',
+    card: 'rgb(18, 18, 18)',
+    text: 'rgb(229, 229, 231)',
+    border: 'rgb(39, 39, 41)',
+    notification: 'rgb(255, 59, 48)',
+  },
+};
 
 export const profilesAvailablesInitial: Profile[] = [
   {
@@ -51,11 +77,51 @@ export const profilesAvailablesInitial: Profile[] = [
   },
 ];
 
+type LG = {
+  "bottomIcons": {
+    "home": string
+    "search": string
+    "downloads": string
+    "menu": string
+    "soon": string
+  },
+  "headerHome": {
+    "series": string,
+    "movies": string
+  },
+  "buttonsInteractive": {
+    "myList": string
+    "myAccount": string
+    "logout": string,
+    "login": string,
+    "register": string,
+    "More": string
+  },
+  "blockTitle": {
+    "keepWatching": string
+    "myList": string
+    "recommended": string,
+    "top10": string
+  },
+  "settings": {
+    "editiPerfil": string
+    "edit": string
+  },
+  "pageTitles": {
+    "camera": RootTabParamList
+    "home": RootTabParamList
+    "search": RootTabParamList
+    "downloads": RootTabParamList
+    "menu": RootTabParamList
+    "soon": RootTabParamList
+  }
+}
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
-  const [perfil, setPerfil] = React.useState('teste')
-  const [profilesAvailables, setProfilesAvailables] = React.useState<Profile[]>(profilesAvailablesInitial)
-  const [authenticated, setAuthenticated] = React.useState<boolean|null>(null)
-  
+  const [perfil, setPerfil] = useState('teste')
+  const [profilesAvailables, setProfilesAvailables] = useState<Profile[]>(profilesAvailablesInitial)
+  const [authenticated, setAuthenticated] = useState<boolean|null>(null)
+  const [lg, setLg] = useState<LG | null>(null)
   
   async function userLogged(){
     const persisted = await AsyncStorage.getItem('user');
@@ -79,16 +145,30 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     }
   }
   
-  React.useEffect(() => {
+  /*
+  * Captura a linguagem do dispositivo do usuario
+  */
+  async function carregarLg(){
+    // const persisted = await AsyncStorage.getItem('language');
+    const persisted = false
+    if(!!persisted){
+      setLg(languages[persisted])
+    } else {
+      setLg(languages['pt'])
+    }
+  }
+  
+  useEffect(() => {
     userLogged().then()
+    carregarLg().then()
   }, [])
   
   return (
-    <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables }}>
+    <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg }}>
       <NavigationContainer
         linking={LinkingConfiguration}
-        theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootNavigator authenticated={authenticated} />
+        theme={colorScheme === 'dark' ? DarkTheme : LightTheme}>
+        <RootNavigator authenticated={authenticated} lg={lg} />
       </NavigationContainer>
     </TempStore.Provider>
   );
@@ -100,8 +180,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootNavigator({authenticated}) {
-  if(authenticated === null){
+function RootNavigator({authenticated, lg}) {
+  if(lg === null || authenticated === null){
     return <InitialPage/>
   }
   return (
@@ -113,7 +193,7 @@ function RootNavigator({authenticated}) {
       <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
       <Stack.Screen name="AuthPage" component={AuthPage} options={{ headerShown: false }} />
       <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
-      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: 'Camera' }}  />
+      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: lg.pageTitles.Camera }}  />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -129,6 +209,7 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
+  const { lg } = useContext(TempStore)
 
   return (
     <BottomTab.Navigator
@@ -137,44 +218,35 @@ function BottomTabNavigator() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
-        name="Home"
+        name={lg.pageTitles.home}
         component={HomeScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} /> }}
       />
       <BottomTab.Screen
-        name="Search"
+        name={lg.pageTitles.search}
         component={SearchScreen}
         options={{
-          headerShown: false,
+          // headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Soon"
+        name={lg.pageTitles.soon}
         component={SearchScreen}
         options={{
-          headerShown: false,
-          title: 'Soon',
+          // headerShown: false,
+          title: `${lg.pageTitles.soon}`,
           tabBarIcon: ({ color }) => <TabBarIcon name="folder" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Downloads"
+        name={lg.pageTitles.downloads}
         component={SearchScreen}
         options={{
-          title: 'Downloads',
+          title: `${lg.pageTitles.downloads}`,
           tabBarIcon: ({ color }) => <TabBarIcon name="download" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Menu"
-        component={More}
-        options={{
-          headerShown: false,
-          title: 'Menu',
-          tabBarIcon: ({ color }) => <TabBarIcon name="bars" color={color} />,
         }}
       />
     </BottomTab.Navigator>
