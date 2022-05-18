@@ -53,13 +53,6 @@ export const singIn = async (email, password) => {
   return auth.signInWithEmailAndPassword(email, password)
 }
 
-export const getAvatarFromDB = async (name: string) => {
-  const user = await currentFirebaseUser()
-  const userRef = database.collection(`${user.uid}`).doc(`${name}_avatar`)
-  const doc = await userRef.get()
-  return doc.data()
-}
-
 export const getAllAvatarsFromDB = async (setProfilesAvailables: (values: Profile[]) => void) => {
   const namesTemp = ['José', 'Luiz', 'João', 'Maria', 'Pedro']
   const user = await currentFirebaseUser()

@@ -1,10 +1,11 @@
-import React, {useContext} from 'react';
-import styled from 'styled-components/native';
-import Avatar from '../components/Avatar';
-import {Alert, AsyncStorage, Text} from 'react-native';
-import {MaterialIcons} from '@expo/vector-icons';
+import React, { useContext } from 'react'
+import styled from 'styled-components/native'
+import Avatar from '../components/Avatar'
+import { Alert, Text } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
 import { auth } from '../config/firebase'
 import TempStore from '../navigation/tempStore'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Screen = styled.View`
   flex: 1;

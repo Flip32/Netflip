@@ -1,13 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, TouchableOpacity, View, Text, Alert, AsyncStorage} from 'react-native';
-import {HelperText, TextInput} from 'react-native-paper'
-import { CommonActions } from "@react-navigation/native";
+import React, { useContext, useEffect, useState } from 'react'
+import { StyleSheet, TouchableOpacity, View, Text, Alert } from 'react-native'
+import { HelperText, TextInput } from 'react-native-paper'
+import { CommonActions } from "@react-navigation/native"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Logo } from '../components/Header'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import {auth, LOCAL_KEY} from '../config/firebase'
-import {getAllAvatarsFromDB, singIn} from '../service/firestore'
+import { getAllAvatarsFromDB, singIn } from '../service/firestore'
 import TempStore from '../navigation/tempStore'
 
 const HeaderAuth = styled.View`
@@ -16,12 +16,29 @@ const HeaderAuth = styled.View`
   justify-content: space-between;
   padding: 25px 25px 0 25px;
   width: 100%;
+  margin-top: 15px;
+`;
+
+const LogoBigContainer = styled.View`
+  align-self: center;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   margin-top: 10px;
+  position: absolute;
+  top: 30%;
+`;
+
+const LogoBig = styled.Image`
+  width: 200px;
+  height: 100px;
 `;
 
 const AuthPage = (props) => {
   
   const [showLogin, setShowLogin] = useState(false)
+  const { setProfilesAvailables } = useContext(TempStore)
   
   const schema = Yup.object().shape({
     email: Yup.string()
@@ -40,7 +57,7 @@ const AuthPage = (props) => {
   
   async function login(values: LoginForm) {
     const {email, password} = values
-    const { setProfilesAvailables } = useContext(TempStore)
+    
     try{
       const log = await singIn(email, password)
       if(!log){
@@ -137,9 +154,20 @@ const AuthPage = (props) => {
   
   return (
     <View style={styles.container}>
-      <HeaderAuth>
-        <Logo resizeMode="contain" source={require('../assets/logo.png')}/>
-      </HeaderAuth>
+      {
+        showLogin &&
+        <HeaderAuth>
+          <Logo resizeMode="contain" source={require('../assets/logo.png')}/>
+        </HeaderAuth>
+      }
+  
+      {
+        !showLogin &&
+        <LogoBigContainer>
+          <LogoBig resizeMode="contain" source={require('../assets/images/icon.png')}/>
+        </LogoBigContainer>
+      }
+      
       {
         showLogin && formRender()
       }

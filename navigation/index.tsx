@@ -3,7 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as React from 'react';
-import {AsyncStorage, ColorSchemeName, Pressable, SafeAreaView, StatusBar, View} from 'react-native';
+import { ColorSchemeName } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -11,7 +12,7 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import HomeScreen from '../screens/HomeScreen'
 import SearchScreen from '../screens/SearchScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import ProfileToEdit from '../screens/ProfileToEditScreen'
 import More, {Profile} from '../screens/MoreScreen'
@@ -20,7 +21,7 @@ import CameraScreen from '../screens/CameraScreen'
 import AuthPage from '../screens/AuthScreen'
 import TempStore from './tempStore'
 import InitialPage from '../screens/initialPage'
-import {getAllAvatarsFromDB, getAvatarFromDB, singIn} from '../service/firestore'
+import {getAllAvatarsFromDB, singIn} from '../service/firestore'
 
 export const profilesAvailablesInitial: Profile[] = [
   {
