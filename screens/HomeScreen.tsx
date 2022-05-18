@@ -57,9 +57,9 @@ const itemDestaqueDefault: Item = {
   }
 
 export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
-  const { navigation, route } = props
+  const { navigation } = props
   
-  const { perfil } = useContext(TempStore)
+  const { perfil, lg } = useContext(TempStore)
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api)
   const [itensTop10, setItensTop10] = useState(() => api)
@@ -173,14 +173,14 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
           </Gradient>
         </Poster>
         { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
-          <Movies label="Continuar assitindo" itens={continuarAssisindo} />
+          <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} />
         }
         {
           (!!itensMinhaLista && itensMinhaLista.length > 0) &&
-          <Movies label="MinhaLista" itens={itensMinhaLista} />
+          <Movies label={lg.blockTitle.myList} itens={itensMinhaLista} />
         }
-        <Movies label="Recomendados" itens={itensRecomendados} />
-        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `Top 10`} itens={itensTop10} />
+        <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} />
+        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} />
       </Container>
     </>
   );

@@ -86,16 +86,17 @@ type LG = {
     "soon": string
   },
   "headerHome": {
-    "series": string,
+    "series": string
     "movies": string
   },
   "buttonsInteractive": {
     "myList": string
     "myAccount": string
-    "logout": string,
-    "login": string,
-    "register": string,
-    "More": string
+    "logout": string
+    "login": string
+    "register": string
+    "more": string
+    "watch": string
   },
   "blockTitle": {
     "keepWatching": string
@@ -154,7 +155,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     if(!!persisted){
       setLg(languages[persisted])
     } else {
-      setLg(languages['pt'])
+      setLg(languages['en'])
     }
   }
   

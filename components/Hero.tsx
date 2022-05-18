@@ -95,7 +95,7 @@ type Hero = {
 
 const Hero = (props: Hero) => {
   const { item, lista, callbackUpdateHome } = props;
-  const { perfil } = useContext(TempStore);
+  const { perfil, lg } = useContext(TempStore);
   const tipo = item.Type
   const itemSaved = !!tipo && !!lista ? lista[tipo]?.find(i => i === item.imdbID) : null
   
@@ -137,17 +137,17 @@ const Hero = (props: Hero) => {
           }
         }}>
           <Feather name={!!itemSaved ? 'check' : 'plus'} size={26} color="#FFF" />
-          <TextButton>Minha lista</TextButton>
+          <TextButton>{lg.buttonsInteractive.myList}</TextButton>
         </Button>
 
         <Play>
           <Ionicons name="ios-play" size={26} />
-          <TextButtonPlay>Assistir</TextButtonPlay>
+          <TextButtonPlay>{lg.buttonsInteractive.watch}</TextButtonPlay>
         </Play>
 
         <Button>
           <Feather name="info" size={22} color="#FFF" />
-          <TextButton>Saiba mais</TextButton>
+          <TextButton>{lg.buttonsInteractive.knowMore}</TextButton>
         </Button>
       </MenuHero>
     </Container>

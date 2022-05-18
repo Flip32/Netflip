@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Pressable } from 'react-native'
 import styled from 'styled-components/native';
 import {Profile} from '../screens/MoreScreen'
 import {css} from 'styled-components'
+import TempStore from '../navigation/tempStore'
 
 const avatarSize = css`
   width: 30px;
@@ -46,6 +47,8 @@ type Header = {
 
 const Header = (props: Header) => {
   const { perfil, navigation, callBackFilter } = props
+  const { lg } = useContext(TempStore)
+  
   return (
     <Container>
       <Menu onPress={() => callBackFilter(null)}>
@@ -53,11 +56,11 @@ const Header = (props: Header) => {
       </Menu>
       
       <Menu onPress={() => callBackFilter('series')} >
-        <Label>Séries</Label>
+        <Label>{lg.headerHome.series}</Label>
       </Menu>
       
       <Menu onPress={() => callBackFilter('movie')}>
-        <Label>Filmes</Label>
+        <Label>{lg.headerHome.movies}</Label>
       </Menu>
       
       {/*<Menu onPress={() => {}}>

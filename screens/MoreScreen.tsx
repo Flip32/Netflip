@@ -84,7 +84,7 @@ const editProfile = (navigation, profiles) => {
 };
 
 const More = (props) => {
-  const { perfil, setPerfil, profilesAvailables } = useContext(TempStore);
+  const { perfil, setPerfil, profilesAvailables, lg } = useContext(TempStore);
   replaceAvatarsWithImage(props, profilesAvailables);
   
   
@@ -112,9 +112,9 @@ const More = (props) => {
       <NetflixButton
         onPress={() => editProfile(props.navigation, profilesAvailables)}>
         <MaterialIcons name="edit" size={24} color="gray" />
-        <ButtonLabel>Gerenciar perfis</ButtonLabel>
+        <ButtonLabel>{lg.settings.editiPerfil}</ButtonLabel>
       </NetflixButton>
-      <Text onPress={() => logout(props.navigation)} style={{ color: '#FFF', alignSelf: 'center', position: 'absolute', bottom: 30 }}>Sair</Text>
+      <Text onPress={() => logout(props.navigation)} style={{ color: '#FFF', alignSelf: 'center', position: 'absolute', bottom: 30 }}>{lg.buttonsInteractive.logout}</Text>
     </Screen>
   );
 };

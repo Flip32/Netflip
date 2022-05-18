@@ -23,7 +23,9 @@ const TempStore = createContext({
       "logout": "Logout",
       "login": "Login",
       "register": "Register",
-      "More": "More"
+      "more": "More",
+      "watch": "Watch",
+      "knowMore": "Know More"
     },
     "blockTitle": {
       "keepWatching": "Keep Watching",
