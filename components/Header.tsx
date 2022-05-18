@@ -8,7 +8,6 @@ import TempStore from '../navigation/tempStore'
 const avatarSize = css`
   width: 30px;
   height: 30px;
-  border-radius: 30px;
 `;
 
 export const AvatarIcon = styled.Image`

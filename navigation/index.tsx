@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react';
+import { ColorSchemeName } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ColorSchemeName } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Localization from 'expo-localization';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -77,6 +78,7 @@ export const profilesAvailablesInitial: Profile[] = [
   },
 ];
 
+const linguasDisponiveis = [ 'en', 'pt' ]
 type LG = {
   "bottomIcons": {
     "home": string
@@ -123,6 +125,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   const [profilesAvailables, setProfilesAvailables] = useState<Profile[]>(profilesAvailablesInitial)
   const [authenticated, setAuthenticated] = useState<boolean|null>(null)
   const [lg, setLg] = useState<LG | null>(null)
+
   
   async function userLogged(){
     const persisted = await AsyncStorage.getItem('user');
@@ -131,6 +134,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
         const email = persisted.split('-')[0]
         const password = persisted.split('-')[1]
         const log = await singIn(email, password)
+        // @ts-ignore
         if(log?.user.uid){
           await getAllAvatarsFromDB(setProfilesAvailables)
           setAuthenticated(true)
@@ -150,13 +154,16 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   * Captura a linguagem do dispositivo do usuario
   */
   async function carregarLg(){
-    // const persisted = await AsyncStorage.getItem('language');
-    const persisted = false
-    if(!!persisted){
-      setLg(languages[persisted])
-    } else {
+    const localization = Localization.locale
+    const idioma = linguasDisponiveis.find(l => localization.includes(l))
+    if(!idioma){
+      // @ts-ignore
       setLg(languages['en'])
+    } else {
+      // @ts-ignore
+      setLg(languages[idioma])
     }
+    
   }
   
   useEffect(() => {
@@ -165,6 +172,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   }, [])
   
   return (
+    // @ts-ignore
     <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg }}>
       <NavigationContainer
         linking={LinkingConfiguration}
@@ -181,6 +189,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
  */
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+// @ts-ignore
 function RootNavigator({authenticated, lg}) {
   if(lg === null || authenticated === null){
     return <InitialPage/>
