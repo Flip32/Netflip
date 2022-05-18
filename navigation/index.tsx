@@ -22,7 +22,7 @@ import TempStore from './tempStore'
 import InitialPage from '../screens/initialPage'
 import {getAllAvatarsFromDB, getAvatarFromDB, singIn} from '../service/firestore'
 
-let profilesAvailablesInitial: Profile[] = [
+export const profilesAvailablesInitial: Profile[] = [
   {
     icon: require('../assets/avatars/avatar1.png'),
     name: 'José',
@@ -55,7 +55,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   const [profilesAvailables, setProfilesAvailables] = React.useState<Profile[]>(profilesAvailablesInitial)
   const [authenticated, setAuthenticated] = React.useState<boolean|null>(null)
   
-  async function useLogged(){
+  
+  async function userLogged(){
     const persisted = await AsyncStorage.getItem('user');
     try{
       if(!!persisted){
@@ -63,17 +64,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
         const password = persisted.split('-')[1]
         const log = await singIn(email, password)
         if(log?.user.uid){
-          const allAvatarsFromDB = await getAllAvatarsFromDB()
-          if(allAvatarsFromDB && allAvatarsFromDB.length>0){
-            const newProfilesTemp = profilesAvailablesInitial.map(profile => {
-              const avatar = allAvatarsFromDB.find(avatar => avatar.name === profile.name)
-              if(avatar){
-                return {...profile, uri: avatar.url, icon: null}
-              }
-              return profile
-            })
-            setProfilesAvailables(newProfilesTemp)
-          }
+          await getAllAvatarsFromDB(setProfilesAvailables)
           setAuthenticated(true)
         } else {
           setAuthenticated(false)
@@ -88,7 +79,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   }
   
   React.useEffect(() => {
-    useLogged().then()
+    userLogged().then()
   }, [])
   
   return (

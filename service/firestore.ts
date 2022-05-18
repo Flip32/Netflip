@@ -1,7 +1,9 @@
 import firebase from 'firebase/compat/app'
-import {auth, database, appInitilizer} from '../config/firebase'
+import { auth, database } from '../config/firebase'
 import 'firebase/storage';
 import { getStorage, uploadBytes, ref, getDownloadURL } from 'firebase/storage';
+import { Profile } from '../screens/MoreScreen'
+import { profilesAvailablesInitial } from '../navigation'
 
 
 export const currentFirebaseUser = () => {
@@ -58,20 +60,29 @@ export const getAvatarFromDB = async (name: string) => {
   return doc.data()
 }
 
-export const getAllAvatarsFromDB = async () => {
+export const getAllAvatarsFromDB = async (setProfilesAvailables: (values: Profile[]) => void) => {
   const namesTemp = ['José', 'Luiz', 'João', 'Maria', 'Pedro']
   const user = await currentFirebaseUser()
-  const avatars = []
+  const avatars: Profile[] = []
   for(let name of namesTemp) {
       const userRef = database.collection(`${user.uid}`).doc(`${name}_avatar`)
       const doc = await userRef.get()
       const avatar = doc.data()
       if(avatar){
-        avatars.push({ name, url: avatar.url })
+        avatars.push({ name, uri: avatar.url, icon: null })
       }
     }
-  console.log('avatars', avatars)
-  return avatars
+  
+  if(avatars && avatars.length>0){
+    const newProfilesTemp = profilesAvailablesInitial.map(profile => {
+      const avatar = avatars.find(avatar => avatar.name === profile.name)
+      if(avatar){
+        return {...profile, uri: avatar.uri, icon: null}
+      }
+      return profile
+    })
+    setProfilesAvailables(newProfilesTemp)
+  }
 }
 
 export const saveAvatarOnDB = async (url: string, name: string) => {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View, Text, Alert, AsyncStorage} from 'react-native';
 import {HelperText, TextInput} from 'react-native-paper'
 import { CommonActions } from "@react-navigation/native";
@@ -7,7 +7,8 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import {auth, LOCAL_KEY} from '../config/firebase'
-import {singIn} from '../service/firestore'
+import {getAllAvatarsFromDB, singIn} from '../service/firestore'
+import TempStore from '../navigation/tempStore'
 
 const HeaderAuth = styled.View`
   align-items: center;
@@ -39,11 +40,13 @@ const AuthPage = (props) => {
   
   async function login(values: LoginForm) {
     const {email, password} = values
+    const { setProfilesAvailables } = useContext(TempStore)
     try{
       const log = await singIn(email, password)
       if(!log){
         throw new Error('User not found')
       }
+      await getAllAvatarsFromDB(setProfilesAvailables)
       Alert.alert(
         'User Authenticated',
         `User ${log.user.email} has succesfuly been authenticated!`,

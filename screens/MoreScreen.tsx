@@ -40,7 +40,7 @@ const ButtonLabel = styled.Text`
 `;
 
 export type Profile = {
-  icon: string
+  icon: string | null;
   name: string
   uri?: string | null
 }
