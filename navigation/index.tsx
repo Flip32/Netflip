@@ -236,14 +236,6 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} type={'F'} /> }}
       />
       <BottomTab.Screen
-        name={lg.pageTitles.search}
-        component={SearchScreen}
-        options={{
-          // headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
         name={lg.pageTitles.soon}
         component={SearchScreen}
         options={{
@@ -251,6 +243,14 @@ function BottomTabNavigator() {
           title: `${lg.pageTitles.soon}`,
           // tabBarIcon: ({ color }) => <TabBarIcon name="play-circle-o" color={color} />,
           tabBarIcon: ({ color }) => <TabBarIcon name="play-box-multiple-outline" color={color} type={'MI'} />,
+        }}
+      />
+      <BottomTab.Screen
+        name={lg.pageTitles.search}
+        component={SearchScreen}
+        options={{
+          // headerShown: false,
+          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
         }}
       />
       <BottomTab.Screen
