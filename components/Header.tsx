@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Dimensions, Pressable, ScrollView, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native';
 import { css } from 'styled-components'
@@ -38,14 +38,6 @@ const Subheader = styled.View`
   margin-top: 10px;
 `;
 
-const HeadersHome = styled.View`
-  align-items: center;
-  flex-direction: row;
-  justify-content: space-around;
-  padding: 0;
-  width: 100%;
-  margin-top: 10px;
-`;
 
 export const Logo = styled.Image`
   width: 20px;
@@ -69,22 +61,39 @@ const SubMenu = styled.View`
 
 export type Filtro = 'series' | 'movie' | 'myList' | null
 
+export type FiltroGenre = 'Home' | 'My List' | "Action" | "Adventure" | "Animation" | "Biography" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Fantasy" | "History" | "Horror" | "Mystery" | "Romance" | "Short" | "Sci-Fi" | "Thriller"
+
+export type FiltroGenreList = { key: string, value: FiltroGenre }[]
+
 type Header = {
   perfil: Profile
   navigation: any
   callBackFilter: (value: Filtro) => void
+  callBackFilterGenre: (value: FiltroGenre) => void
 }
 
-export const categorias = [
-  'Minha Lista',
-  'Séries',
-  'Filmes',
-]
-
 const Header = (props: Header) => {
-  const { perfil, navigation, callBackFilter } = props
+  const { perfil, navigation, callBackFilter, callBackFilterGenre } = props
   const { lg } = useContext(TempStore)
   const [showCategorias, setShowCategorias] = useState(false)
+  const [categorias, setCategorias] = useState<FiltroGenreList[]>([])
+  const [selectedCategoria, setSelectedCategoria] = useState<FiltroGenre | undefined>(undefined)
+  
+  const HeadersHome = styled.View`
+  align-items: center;
+  flex-direction: row;
+  justify-content: ${selectedCategoria ? 'flex-start' : 'space-around'};
+  padding: 0;
+  width: 100%;
+  margin-top: 10px;
+`;
+  
+  useEffect(() => {
+    const catArr: FiltroGenreList = Object.keys(lg.genreFilters).map(k => {
+      return {key: k, value: lg.genreFilters[k]}
+    })
+    setCategorias(catArr)
+  }, [])
   
   return (
     <>
@@ -111,17 +120,25 @@ const Header = (props: Header) => {
           </Subheader>
           
           <HeadersHome>
-            <Menu onPress={() => callBackFilter('series')}>
-              <Label>{lg.headerHome.series}</Label>
-            </Menu>
+            {
+              !selectedCategoria &&
+              <>
+                <Menu onPress={() => callBackFilter('series')}>
+                  <Label>{lg.headerHome.series}</Label>
+                </Menu>
+  
+                <Menu onPress={() => callBackFilter('movie')}>
+                  <Label>{lg.headerHome.movies}</Label>
+                </Menu>
+              </>
+            }
             
-            <Menu onPress={() => callBackFilter('movie')}>
-              <Label>{lg.headerHome.movies}</Label>
-            </Menu>
-            
-            <Menu onPress={() => setShowCategorias(!showCategorias)}>
+            <Menu onPress={() => {
+              if(categorias.length < 1 ) return;
+              setShowCategorias(!showCategorias)
+            }}>
               <SubMenu>
-                <Label>{lg.headerHome.category}</Label>
+                <Label>{selectedCategoria ?? lg.headerHome.category}</Label>
                 <FontAwesome size={22} style={{marginLeft: 5}} name={'caret-down'} color={'#FFF'}/>
               </SubMenu>
             </Menu>
@@ -140,11 +157,19 @@ const Header = (props: Header) => {
                 {
                   categorias.map((item, index) => (
                     <TouchableOpacity
-                      style={{ marginBottom: 20 }}
+                      style={{ marginBottom: 25 }}
                       key={index}
-                      onPress={() => callBackFilter(item)}
+                      onPress={() => {
+                        callBackFilterGenre(item.key)
+                        if(item.key === 'Home') {
+                          setSelectedCategoria(undefined)
+                        } else {
+                          setSelectedCategoria(item.value)
+                        }
+                        setShowCategorias(false)
+                      }}
                     >
-                      <Label>{item}</Label>
+                      <Label>{item.value}</Label>
                     </TouchableOpacity>
                   ))
                 }

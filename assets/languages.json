@@ -39,6 +39,26 @@
       "downloads": "Downloads",
       "menu": "Menu",
       "soon": "Novidades"
+    },
+    "genreFilters": {
+      "Home": "Início",
+      "My List":  "Minha Lista",
+      "Action":  "Ação",
+      "Adventure":  "Aventura",
+      "Animation":  "Animação",
+      "Biography":  "Biografia",
+      "Comedy":  "Comédia",
+      "Crime":  "Crime",
+      "Documentary":  "Documentário",
+      "Drama":  "Drama",
+      "Fantasy":  "Fantasia",
+      "History":  "História",
+      "Horror":  "Terror",
+      "Mystery":  "Mistério",
+      "Romance":  "Romance",
+      "Short":  "Curtas",
+      "Sci-Fi":  "Ficção Científica",
+      "Thriller": "Suspense"
     }
   },
   "en": {
@@ -81,6 +101,26 @@
       "downloads": "Downloads",
       "menu": "Menu",
       "soon": "News"
+    },
+    "genreFilters": {
+      "Home": "Home",
+      "My List":  "My List",
+      "Action":  "Action",
+      "Adventure":  "Adventure",
+      "Animation":  "Animation",
+      "Biography":  "Biography",
+      "Comedy":  "Comedy",
+      "Crime":  "Crime",
+      "Documentary":  "Documentary",
+      "Drama":  "Drama",
+      "Fantasy":  "Fantasy",
+      "History":  "History",
+      "Horror":  "Horror",
+      "Mystery":  "Mystery",
+      "Romance":  "Romance",
+      "Short":  "Short",
+      "Sci-Fi":  "Sci-Fi",
+      "Thriller": "Thriller"
     }
   }
 }

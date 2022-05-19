@@ -4,7 +4,7 @@ import {LinearGradient} from 'expo-linear-gradient'
 import { RootTabScreenProps } from '../types'
 import styled from 'styled-components/native'
 import { Text, View } from '../components/Themed'
-import Header, {Filtro} from '../components/Header'
+import Header, {Filtro, FiltroGenre} from '../components/Header'
 import Hero from '../components/Hero'
 import Movies, {Item} from '../components/Movies'
 import api from '../assets/movies.json'
@@ -66,6 +66,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const [continuarAssisindo, setContinuarAssisindo] = useState([])
   const [destaque, setDestaque] = useState(itemDestaqueDefault)
   const [filtro, setFiltro] = useState(null)
+  const [filtroGenero, setFiltroGenero] = useState(null)
   const [minhaLista, setMinhaLista] = useState()
   const [itensMinhaLista, setItensMinhaLista] = useState([])
   
@@ -74,7 +75,9 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     // @ts-ignore
     const moviesArr = apiMoviesCache[perfil.name]
     if(moviesArr && moviesArr.length > 0){
-      if (!!filtro){
+      if(!!filtroGenero){
+        setContinuarAssisindo(moviesArr.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())))
+      } else if (!!filtro){
         setContinuarAssisindo(moviesArr.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
       } else {
         setContinuarAssisindo(moviesArr)
@@ -83,7 +86,8 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }
   
   function atualizarDestaque() {
-    const arr = !!filtro ? api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : api
+    let arr = !!filtro ? api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : api
+    arr = !!filtroGenero ? arr.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())) : arr
     const itemAleatorio: Item = arr[Math.floor(Math.random() * arr.length)]
     setDestaque(itemAleatorio)
   }
@@ -94,7 +98,9 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
       if(!item.imdbRating) return false;
       return Number(item.imdbRating) >= 7.5;
     });
-    const arr = !!filtro ? itensR.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : itensR
+    let arr = !!filtro ? itensR.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : itensR
+    arr = !!filtroGenero ? arr.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())) : arr
+    
     if(arr.length > 0){
       setItensRecomendados(itensR.sort((a, b) => {
         if(a.imdbRating > b.imdbRating) return -1;
@@ -105,8 +111,12 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }
   
   function atualizarTop10(){
-    if(!filtro) return;
-    setItensTop10(api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
+    if(!filtro && !filtroGenero) return;
+    if(filtroGenero){
+      setItensTop10(api.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())))
+    } else {
+      setItensTop10(api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())))
+    }
   }
   
   async function atualizarMinhaLista(){
@@ -121,7 +131,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     atualizarDestaque();
     atualizarRecomendados();
     atualizarTop10()
-  }, [filtro])
+  }, [filtro, filtroGenero])
   
   useEffect(() => {
       atualizarMinhaLista().then()
@@ -150,6 +160,14 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   function changeFilter(value: Filtro){
     setFiltro(value)
   }
+  
+  function changeFilterGenre(value: FiltroGenre){
+    if(value === 'Home'){
+      setFiltroGenero(null)
+    } else {
+      setFiltroGenero(value)
+    }
+  }
 
   return (
     <>
@@ -168,7 +186,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
               'rgba(0,0,0,0.0)',
               'rgba(0,0,0,1)',
             ]}>
-            <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} />
+            <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} callBackFilterGenre={changeFilterGenre} />
             <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} />
           </Gradient>
         </Poster>

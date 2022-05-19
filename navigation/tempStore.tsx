@@ -45,6 +45,26 @@ const TempStore = createContext({
       "downloads": "Downloads",
       "menu": "Menu",
       "soon": "News"
+    },
+    "genreFilters": {
+      "Home": "Home",
+      "My List":  "My List",
+      "Action":  "Action",
+      "Adventure":  "Adventure",
+      "Animation":  "Animation",
+      "Biography":  "Biography",
+      "Comedy":  "Comedy",
+      "Crime":  "Crime",
+      "Documentary":  "Documentary",
+      "Drama":  "Drama",
+      "Fantasy":  "Fantasy",
+      "History":  "History",
+      "Horror":  "Horror",
+      "Mystery":  "Mystery",
+      "Romance":  "Romance",
+      "Short":  "Short",
+      "Sci-Fi":  "Sci-Fi",
+      "Thriller": "Thriller"
     }
   },
   setLg: () => {},
