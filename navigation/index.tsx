@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { ColorSchemeName } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Foundation, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -42,7 +42,7 @@ const DarkTheme: Theme = {
   dark: true,
   colors: {
     primary: 'rgb(255, 69, 58)',
-    background: 'rgb(76,75,75)',
+    background: 'rgb(32,32,32)',
     card: 'rgb(18, 18, 18)',
     text: 'rgb(229, 229, 231)',
     border: 'rgb(39, 39, 41)',
@@ -176,7 +176,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg }}>
       <NavigationContainer
         linking={LinkingConfiguration}
-        theme={colorScheme === 'dark' ? DarkTheme : LightTheme}>
+        // theme={colorScheme === 'dark' ? DarkTheme : LightTheme}>
+        theme={DarkTheme}>
         <RootNavigator authenticated={authenticated} lg={lg} />
       </NavigationContainer>
     </TempStore.Provider>
@@ -232,7 +233,7 @@ function BottomTabNavigator() {
         component={HomeScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} /> }}
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} type={'F'} /> }}
       />
       <BottomTab.Screen
         name={lg.pageTitles.search}
@@ -248,7 +249,8 @@ function BottomTabNavigator() {
         options={{
           // headerShown: false,
           title: `${lg.pageTitles.soon}`,
-          tabBarIcon: ({ color }) => <TabBarIcon name="folder" color={color} />,
+          // tabBarIcon: ({ color }) => <TabBarIcon name="play-circle-o" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="play-box-multiple-outline" color={color} type={'MI'} />,
         }}
       />
       <BottomTab.Screen
@@ -256,7 +258,7 @@ function BottomTabNavigator() {
         component={SearchScreen}
         options={{
           title: `${lg.pageTitles.downloads}`,
-          tabBarIcon: ({ color }) => <TabBarIcon name="download" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="arrow-circle-o-down" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -269,6 +271,13 @@ function BottomTabNavigator() {
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
+  type: "MI" | "F"
 }) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
+  if(props.type === "F"){
+    return <Foundation size={20} style={{ marginBottom: -3 }} {...props} />;
+  }
+  if(props.type === 'MI'){
+    return <MaterialCommunityIcons size={20} style={{ marginBottom: -3 }} {...props} />;
+  }
+  return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
 }

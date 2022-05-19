@@ -9,7 +9,8 @@
     },
     "headerHome":{
       "series": "Séries",
-      "movies": "Filmes"
+      "movies": "Filmes",
+      "category": "Categorias"
     },
     "buttonsInteractive": {
       "myList": "Minha Lista",
@@ -50,7 +51,8 @@
     },
     "headerHome":{
       "series": "Series",
-      "movies": "Movies"
+      "movies": "Movies",
+      "category": "Categories"
     },
     "buttonsInteractive": {
       "myList": "My List",

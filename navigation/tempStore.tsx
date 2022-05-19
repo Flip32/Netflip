@@ -15,7 +15,8 @@ const TempStore = createContext({
     },
     "headerHome":{
       "series": "Series",
-      "movies": "Movies"
+      "movies": "Movies",
+      "category": "Categories"
     },
     "buttonsInteractive": {
       "myList": "My List",
