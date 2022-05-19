@@ -1,10 +1,14 @@
-import React, {useContext} from 'react';
-import { Pressable } from 'react-native'
+import React, { useContext, useState } from 'react';
+import {Dimensions, Pressable, ScrollView, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native';
-import {Profile} from '../screens/MoreScreen'
-import {css} from 'styled-components'
-import TempStore from '../navigation/tempStore'
+import { css } from 'styled-components'
 import { FontAwesome } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient'
+import { Portal, Modal } from 'react-native-paper'
+import TempStore from '../navigation/tempStore'
+import { Profile } from '../screens/MoreScreen'
+
+const { width, height } = Dimensions.get('window')
 
 const avatarSize = css`
   width: 30px;
@@ -71,45 +75,94 @@ type Header = {
   callBackFilter: (value: Filtro) => void
 }
 
+export const categorias = [
+  'Minha Lista',
+  'Séries',
+  'Filmes',
+]
+
 const Header = (props: Header) => {
   const { perfil, navigation, callBackFilter } = props
   const { lg } = useContext(TempStore)
+  const [showCategorias, setShowCategorias] = useState(false)
   
   return (
-    <Container>
-      <Subheader>
-        <Menu onPress={() => callBackFilter(null)}>
-          <Logo onPress={() => callBackFilter(null)} resizeMode="contain" source={require('../assets/logo.png')} />
-        </Menu>
-        <Pressable
-          onPress={() => navigation.navigate('More')}
-        >
-          {
-            perfil.uri
-            ? <AvatarIcon source={{ uri: perfil.uri }} />
-            : <AvatarIcon source={perfil.icon} />
-          }
-        </Pressable>
-      </Subheader>
-      
-      <HeadersHome>
-        <Menu onPress={() => callBackFilter('series')} >
-          <Label>{lg.headerHome.series}</Label>
-        </Menu>
-  
-        <Menu onPress={() => callBackFilter('movie')}>
-          <Label>{lg.headerHome.movies}</Label>
-        </Menu>
-  
-        <Menu onPress={() => {}}>
-          <SubMenu>
-            <Label>{lg.headerHome.category}</Label>
-            <FontAwesome size={22} style={{ marginLeft: 5 }} name={'caret-down'} color={'#FFF'} />
-          </SubMenu>
-        </Menu>
-      </HeadersHome>
-      
-    </Container>
+    <>
+      <LinearGradient
+        start={{x: width / 2, y: 0}}
+        end={{x: width / 2, y: 0.5}}
+        colors={['rgba(0, 0 , 0, 0.4)', 'rgba(0, 0 , 0, 0.5)', 'rgba(0, 0 , 0, 0)']}
+        style={{flex: 1, zIndex: -1}}
+      >
+        <Container>
+          <Subheader>
+            <Menu onPress={() => callBackFilter(null)}>
+              <Logo onPress={() => callBackFilter(null)} resizeMode="contain" source={require('../assets/logo.png')}/>
+            </Menu>
+            <Pressable
+              onPress={() => navigation.navigate('More')}
+            >
+              {
+                perfil.uri
+                ? <AvatarIcon source={{uri: perfil.uri}}/>
+                : <AvatarIcon source={perfil.icon}/>
+              }
+            </Pressable>
+          </Subheader>
+          
+          <HeadersHome>
+            <Menu onPress={() => callBackFilter('series')}>
+              <Label>{lg.headerHome.series}</Label>
+            </Menu>
+            
+            <Menu onPress={() => callBackFilter('movie')}>
+              <Label>{lg.headerHome.movies}</Label>
+            </Menu>
+            
+            <Menu onPress={() => setShowCategorias(!showCategorias)}>
+              <SubMenu>
+                <Label>{lg.headerHome.category}</Label>
+                <FontAwesome size={22} style={{marginLeft: 5}} name={'caret-down'} color={'#FFF'}/>
+              </SubMenu>
+            </Menu>
+          </HeadersHome>
+        
+        </Container>
+      </LinearGradient>
+      <Portal>
+        <Modal visible={showCategorias} style={{ height: '100%' }}>
+            <View style={{ height: '90%', alignItems: 'center', justifyContent: 'center', paddingTop: 30 }}>
+              <ScrollView
+                style={{alignSelf: 'center', width: '90%'}}
+                contentContainerStyle={{ alignItems: 'center', justifyContent: 'center'}}
+                showsVerticalScrollIndicator={false}
+              >
+                {
+                  categorias.map((item, index) => (
+                    <TouchableOpacity
+                      style={{ marginBottom: 20 }}
+                      key={index}
+                      onPress={() => callBackFilter(item)}
+                    >
+                      <Label>{item}</Label>
+                    </TouchableOpacity>
+                  ))
+                }
+              </ScrollView>
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'center',
+                  position: 'absolute',
+                  bottom: 0,
+                }}
+                onPress={() => setShowCategorias(false)}
+              >
+                <FontAwesome name={'times-circle'} size={50} color={'#FFF'}/>
+              </TouchableOpacity>
+            </View>
+        </Modal>
+      </Portal>
+    </>
   );
 };
 
