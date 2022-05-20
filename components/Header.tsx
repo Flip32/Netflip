@@ -28,7 +28,7 @@ const Container = styled.View`
   margin-top: 10px;
 `;
 
-const Subheader = styled.View`
+export const Subheader = styled.View`
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
@@ -50,7 +50,7 @@ const Label = styled.Text`
   letter-spacing: 0.1px;
 `;
 
-const Menu = styled.TouchableOpacity``;
+export const Menu = styled.TouchableOpacity``;
 
 const SubMenu = styled.View`
   align-items: center;

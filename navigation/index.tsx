@@ -25,6 +25,8 @@ import InitialPage from '../screens/initialPage'
 import {getAllAvatarsFromDB, singIn} from '../service/firestore'
 import languages from '../assets/languages.json'
 import {Theme} from '@react-navigation/native/src/types'
+import NewPAge from '../screens/NewsPage'
+import DownloadsPage from '../screens/DownloadsPAge'
 
 const LightTheme: Theme = {
   dark: false,
@@ -237,9 +239,9 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name={lg.pageTitles.soon}
-        component={SearchScreen}
+        component={NewPAge}
         options={{
-          // headerShown: false,
+          headerShown: false,
           title: `${lg.pageTitles.soon}`,
           // tabBarIcon: ({ color }) => <TabBarIcon name="play-circle-o" color={color} />,
           tabBarIcon: ({ color }) => <TabBarIcon name="play-box-multiple-outline" color={color} type={'MI'} />,
@@ -255,8 +257,9 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name={lg.pageTitles.downloads}
-        component={SearchScreen}
+        component={DownloadsPage}
         options={{
+          headerShown: false,
           title: `${lg.pageTitles.downloads}`,
           tabBarIcon: ({ color }) => <TabBarIcon name="arrow-circle-o-down" color={color} />,
         }}

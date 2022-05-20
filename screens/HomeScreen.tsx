@@ -13,7 +13,7 @@ import TempStore from '../navigation/tempStore'
 import { getMinhaLista} from '../service/firestore'
 import ItemInfo from '../components/itemInfo'
 
-const Container = styled.ScrollView`
+export const Container = styled.ScrollView`
   flex: 1;
   background-color: #000;
 `;
@@ -202,7 +202,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
         <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => setShowItemInfo(item)} />
       </Container>
       {
-        showItemInfo && <ItemInfo item={destaque} onClose={() => setShowItemInfo(undefined)} />
+        showItemInfo && <ItemInfo item={showItemInfo} onClose={() => setShowItemInfo(undefined)} />
       }
     </>
   );
