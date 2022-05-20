@@ -69,10 +69,11 @@ type Movies = {
 type PressMovie = {
   pressed: boolean
   index?: number
+  onClickItem: (value: Item) => void
 };
 
 const Movies = (props: Movies) => {
-  const {label, itens} = props;
+  const {label, itens, onClickItem} = props;
   const [pressing, setPressedIn] = useState<PressMovie>({pressed: false});
 
   const translate = useSpring({
@@ -93,6 +94,7 @@ const Movies = (props: Movies) => {
           return (
             <MovieCard key={String(index)}>
               <TouchableWithoutFeedback
+                onLongPress={() => onClickItem(movie)}
                 onPressOut={() => {
                   setPressedIn({pressed: false});
                 }}

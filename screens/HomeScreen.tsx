@@ -11,6 +11,7 @@ import api from '../assets/movies.json'
 import apiMoviesCache from '../assets/movieToResume.json'
 import TempStore from '../navigation/tempStore'
 import { getMinhaLista} from '../service/firestore'
+import ItemInfo from '../components/itemInfo'
 
 const Container = styled.ScrollView`
   flex: 1;
@@ -58,7 +59,6 @@ const itemDestaqueDefault: Item = {
 
 export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const { navigation } = props
-  
   const { perfil, lg } = useContext(TempStore)
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api)
@@ -69,6 +69,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const [filtroGenero, setFiltroGenero] = useState(null)
   const [minhaLista, setMinhaLista] = useState()
   const [itensMinhaLista, setItensMinhaLista] = useState([])
+  const [showItemInfo, setShowItemInfo] = useState<Item | undefined>(undefined)
   
   function atualizarContinuarAssistindo(){
     if(!perfil) return;
@@ -187,19 +188,22 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
               'rgba(0,0,0,1)',
             ]}>
             <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} callBackFilterGenre={changeFilterGenre} />
-            <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} />
+            <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} onClickItem={(item: Item) => setShowItemInfo(item)} />
           </Gradient>
         </Poster>
         { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
-          <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} />
+          <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} onClickItem={(item: Item) => setShowItemInfo(item)} />
         }
         {
           (!!itensMinhaLista && itensMinhaLista.length > 0) &&
-          <Movies label={lg.blockTitle.myList} itens={itensMinhaLista} />
+          <Movies label={lg.blockTitle.myList} itens={itensMinhaLista} onClickItem={(item: Item) => setShowItemInfo(item)} />
         }
-        <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} />
-        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} />
+        <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} onClickItem={(item: Item) => setShowItemInfo(item)} />
+        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => setShowItemInfo(item)} />
       </Container>
+      {
+        showItemInfo && <ItemInfo item={destaque} onClose={() => setShowItemInfo(undefined)} />
+      }
     </>
   );
 }

@@ -91,10 +91,11 @@ const TextButtonPlay = styled.Text`
 type Hero = {
   item: Item
   lista: any
+  onClickItem: (item: Item) => void
 };
 
 const Hero = (props: Hero) => {
-  const { item, lista, callbackUpdateHome } = props;
+  const { item, lista, callbackUpdateHome, onClickItem } = props;
   const { perfil, lg } = useContext(TempStore);
   const tipo = item.Type
   const itemSaved = !!tipo && !!lista ? lista[tipo]?.find(i => i === item.imdbID) : null
@@ -145,7 +146,9 @@ const Hero = (props: Hero) => {
           <TextButtonPlay>{lg.buttonsInteractive.watch}</TextButtonPlay>
         </Play>
 
-        <Button>
+        <Button
+          onPress={() => onClickItem(item)}
+        >
           <Feather name="info" size={22} color="#FFF" />
           <TextButton>{lg.buttonsInteractive.knowMore}</TextButton>
         </Button>
