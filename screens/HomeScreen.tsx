@@ -161,8 +161,6 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }, [minhaLista])
   
   function changeFilter(value: Filtro){
-    console.log('========================================')
-    console.log('filtro a ser aplicado => ', value)
     setFiltro(value)
   }
   
