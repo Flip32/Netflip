@@ -23,13 +23,7 @@ export default function SearchScreen() {
     }
       setList(api.filter(item => item.Title.toLowerCase().includes(searchQuery.toLowerCase())))
   }, [searchQuery])
-  
-  useEffect(() => {
-      console.log('==============================')
-      console.log(`list`, list)
-      
-  }, [list])
-  
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -76,7 +70,6 @@ export default function SearchScreen() {
               numColumns={3}
               keyExtractor={item => item.imdbID}
               renderItem={({item}) => {
-                console.log(item)
                 return (
                   <TouchableOpacity onPress={() => setShowItemInfo(item)} key={item.imdbID} style={styles.itemContainerPosters}>
           
