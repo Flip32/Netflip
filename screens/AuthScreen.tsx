@@ -7,8 +7,9 @@ import { Logo } from '../components/Header'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
-import { getAllAvatarsFromDB, singIn } from '../service/firestore'
+import {getAllAvatarsFromDB, saveTokenPushNotification, singIn} from '../service/firestore'
 import TempStore from '../navigation/tempStore'
+import {registerForPushNotification} from '../service/notifications'
 
 const HeaderAuth = styled.View`
   align-items: center;
@@ -64,6 +65,10 @@ const AuthPage = (props) => {
       const log = await singIn(email, password)
       if(!log){
         throw new Error('User not found')
+      }
+      const tokenFCM = await registerForPushNotification()
+      if(!!tokenFCM){
+        await saveTokenPushNotification(tokenFCM)
       }
       await getAllAvatarsFromDB(setProfilesAvailables)
       setLoading(false)

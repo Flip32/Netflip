@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useContext} from 'react'
-import {Dimensions, Platform, StatusBar, StyleSheet} from 'react-native'
+import React, {useEffect, useState, useContext, useRef} from 'react'
+import {Alert, Dimensions, Platform, StatusBar, StyleSheet} from 'react-native'
 import {LinearGradient} from 'expo-linear-gradient'
-import { RootTabScreenProps } from '../types'
+import {RootTabParamList, RootTabScreenProps} from '../types'
 import styled from 'styled-components/native'
 import { Text, View } from '../components/Themed'
 import Header, {Filtro, FiltroGenre} from '../components/Header'
@@ -12,6 +12,9 @@ import apiMoviesCache from '../assets/movieToResume.json'
 import TempStore from '../navigation/tempStore'
 import { getMinhaLista} from '../service/firestore'
 import ItemInfo from '../components/itemInfo'
+import * as Notifications from 'expo-notifications'
+import {CommonActions} from '@react-navigation/native'
+import {getLastProfileFromStorage} from './MoreScreen'
 
 export const isIos = Platform.OS === 'ios'
 
@@ -58,10 +61,12 @@ const itemDestaqueDefault: Item = {
     "totalSeasons": "5",
     "Response": "True"
   }
+  
+export type notification = { "type": "ShowMovie", "navigateTo": RootTabParamList, "params"?: { "imdbID": string } }
 
 export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const { navigation } = props
-  const { perfil, lg } = useContext(TempStore)
+  const { perfil, lg, pushAction, setPushAction } = useContext(TempStore)
   
   const [itensRecomendados, setItensRecomendados] = useState(() => api)
   const [itensTop10, setItensTop10] = useState(() => api)
@@ -72,6 +77,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   const [minhaLista, setMinhaLista] = useState()
   const [itensMinhaLista, setItensMinhaLista] = useState([])
   const [showItemInfo, setShowItemInfo] = useState<Item | undefined>(undefined)
+  const responseListener = useRef()
   
   function atualizarContinuarAssistindo(){
     if(!perfil) return;
@@ -139,8 +145,27 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }, [filtro, filtroGenero])
   
   useEffect(() => {
-      atualizarMinhaLista().then()
+    atualizarMinhaLista().then()
   }, [])
+  
+  useEffect(() => {
+    if(!pushAction) return;
+    const { active, params, type,navigateTo  } = pushAction
+      if(active){
+        if(type === 'ShowMovie'){
+          const findItem = api.find(item => item.imdbID === params.imdbID)
+          if(!!findItem){
+            setShowItemInfo(findItem)
+          } else {
+            Alert.alert('Oops', 'Ocorreu um erro ao carregar a página')
+          }
+          setPushAction(null)
+        } else {
+          navigation.navigate(lg.pageTitles[navigateTo.toLowerCase()], params)
+          setPushAction(null)
+        }
+      }
+  }, [pushAction])
   
   useEffect(() => {
     if(!minhaLista || minhaLista === {}) return;
@@ -161,6 +186,31 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
       setItensMinhaLista(arr)
     }
   }, [minhaLista])
+  
+  // TODO - Pensar numa forma melhor de só ter 1 listener no projeto
+  useEffect(() => {
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      const { type, navigateTo, params = {} } = response.notification.request.content.data
+      if(!!navigateTo){
+        const rota = lg.pageTitles[navigateTo.toLowerCase()]
+        // navigation.navigate(rota === lg.pageTitles.home ? 'Root' : rota, params)
+        if(rota === lg.pageTitles.home && type === 'ShowMovie'){
+          const findItem = api.find(item => item.imdbID === params?.imdbID)
+          if(findItem){
+            setShowItemInfo(findItem)
+          } else {
+            Alert.alert('Oops', 'Ocorreu um erro ao carregar a página')
+          }
+        } else {
+          navigation.navigate(lg.pageTitles[navigateTo.toLowerCase()], params)
+        }
+      }
+    });
+    
+    return () => {
+      Notifications.removeNotificationSubscription(responseListener.current)
+    }
+  }, [])
   
   function changeFilter(value: Filtro){
     setFiltro(value)
@@ -204,12 +254,10 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
           <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} onClickItem={(item: Item) => setShowItemInfo(item)} />
         }
         <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => setShowItemInfo(item)} />
+        <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => navigation.navigate('Modal')}/>
       </Container>
       {
-        showItemInfo && <ItemInfo item={showItemInfo} onClose={() => {
-        console.log('ta chegando aqui')
-          setShowItemInfo(undefined)}
-        } />
+        showItemInfo && <ItemInfo item={showItemInfo} onClose={() => setShowItemInfo(undefined) } />
       }
     </>
   );

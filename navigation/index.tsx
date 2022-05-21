@@ -127,7 +127,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   const [profilesAvailables, setProfilesAvailables] = useState<Profile[]>(profilesAvailablesInitial)
   const [authenticated, setAuthenticated] = useState<boolean|null>(null)
   const [lg, setLg] = useState<LG | null>(null)
-
+  const [pushAction, setPushAction] = useState(null)
+  
   
   async function userLogged(){
     const persisted = await AsyncStorage.getItem('user');
@@ -175,7 +176,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   
   return (
     // @ts-ignore
-    <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg }}>
+    <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg, setPushAction, pushAction }}>
       <NavigationContainer
         linking={LinkingConfiguration}
         // theme={colorScheme === 'dark' ? DarkTheme : LightTheme}>

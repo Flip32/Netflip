@@ -49,6 +49,11 @@ export const removeItemOnList = async (item, usuario, lista, callback) => {
   callback()
 }
 
+export const saveTokenPushNotification = async (token) => {
+  const user = await currentFirebaseUser()
+  await database.collection(`${user.uid}`).doc('pushNotificationToken').set({ token })
+}
+
 export const singIn = async (email, password) => {
   return auth.signInWithEmailAndPassword(email, password)
 }

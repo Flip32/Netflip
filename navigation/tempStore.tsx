@@ -72,6 +72,8 @@ const TempStore = createContext({
     }
   },
   setLg: () => {},
+  pushAction: null,
+  setPushAction: (value) => {},
 });
 
 export default TempStore
