@@ -122,6 +122,11 @@ type LG = {
   }
 }
 
+/*
+*  SE TIVER CLONADO ESSE PROJETO DO GITHUB, não esquecer de criar uma conta firebase,
+* criar um arquivo firebase.json com as credenciais do seu firebase,
+* adicionar o firabase ao android, e baixar o arquivo google-services.json
+*/
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   const [perfil, setPerfil] = useState('teste')
   const [profilesAvailables, setProfilesAvailables] = useState<Profile[]>(profilesAvailablesInitial)

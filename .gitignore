@@ -17,3 +17,4 @@ web-build/
 ./config/firebase.js
 ./config/firebase.*
 config/firebase.ts
+google-services.json
