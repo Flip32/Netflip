@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {Dimensions, StatusBar, StyleSheet} from 'react-native'
+import {Dimensions, Platform, StatusBar, StyleSheet} from 'react-native'
 import {LinearGradient} from 'expo-linear-gradient'
 import { RootTabScreenProps } from '../types'
 import styled from 'styled-components/native'
@@ -12,6 +12,8 @@ import apiMoviesCache from '../assets/movieToResume.json'
 import TempStore from '../navigation/tempStore'
 import { getMinhaLista} from '../service/firestore'
 import ItemInfo from '../components/itemInfo'
+
+export const isIos = Platform.OS === 'ios'
 
 export const Container = styled.ScrollView`
   flex: 1;
@@ -204,7 +206,10 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
         <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => setShowItemInfo(item)} />
       </Container>
       {
-        showItemInfo && <ItemInfo item={showItemInfo} onClose={() => setShowItemInfo(undefined)} />
+        showItemInfo && <ItemInfo item={showItemInfo} onClose={() => {
+        console.log('ta chegando aqui')
+          setShowItemInfo(undefined)}
+        } />
       }
     </>
   );

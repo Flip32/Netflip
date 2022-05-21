@@ -5,6 +5,7 @@ import api from '../assets/movies.json'
 import { FontAwesome } from '@expo/vector-icons'
 import TempStore from '../navigation/tempStore'
 import ItemInfo from '../components/itemInfo'
+import {isIos} from './HomeScreen'
 
 const {width, height } = Dimensions.get('window');
 
@@ -27,6 +28,9 @@ export default function SearchScreen() {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        {
+          !isIos && <View style={{height: 30}} />
+        }
         <Searchbar
           placeholder={lg.bottomIcons.search}
           onChangeText={onChangeSearch}

@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Portal, Modal } from 'react-native-paper'
 import TempStore from '../navigation/tempStore'
 import { Profile } from '../screens/MoreScreen'
+import {isIos} from '../screens/HomeScreen'
 
 const { width, height } = Dimensions.get('window')
 
@@ -95,57 +96,69 @@ const Header = (props: Header) => {
     setCategorias(catArr)
   }, [])
   
+  const renderHeader = () => {
+    return (
+      <Container>
+        <Subheader>
+          <Menu onPress={() => callBackFilter(null)}>
+            <Logo  resizeMode="contain" source={require('../assets/logo.png')}/>
+          </Menu>
+          <Pressable
+            onPress={() => navigation.navigate('More')}
+          >
+            {
+              perfil.uri
+              ? <AvatarIcon source={{uri: perfil.uri}}/>
+              : <AvatarIcon source={perfil.icon}/>
+            }
+          </Pressable>
+        </Subheader>
+    
+        <HeadersHome>
+          {
+            !selectedCategoria &&
+            <>
+              <Menu onPress={() => callBackFilter('series')}>
+                <Label>{lg.headerHome.series}</Label>
+              </Menu>
+          
+              <Menu onPress={() => callBackFilter('movie')}>
+                <Label>{lg.headerHome.movies}</Label>
+              </Menu>
+            </>
+          }
+      
+          <Menu onPress={() => {
+            if(categorias.length < 1 ) return;
+            setShowCategorias(!showCategorias)
+          }}>
+            <SubMenu>
+              <Label>{selectedCategoria ?? lg.headerHome.category}</Label>
+              <FontAwesome size={22} style={{marginLeft: 5}} name={'caret-down'} color={'#FFF'}/>
+            </SubMenu>
+          </Menu>
+        </HeadersHome>
+  
+      </Container>
+    )
+  }
+  
   return (
     <>
-      <LinearGradient
-        start={{x: width / 2, y: 0}}
-        end={{x: width / 2, y: 0.5}}
-        colors={['rgba(0, 0 , 0, 0.4)', 'rgba(0, 0 , 0, 0.5)', 'rgba(0, 0 , 0, 0)']}
-        style={{flex: 1, zIndex: -1}}
-      >
-        <Container>
-          <Subheader>
-            <Menu onPress={() => callBackFilter(null)}>
-              <Logo  resizeMode="contain" source={require('../assets/logo.png')}/>
-            </Menu>
-            <Pressable
-              onPress={() => navigation.navigate('More')}
-            >
-              {
-                perfil.uri
-                ? <AvatarIcon source={{uri: perfil.uri}}/>
-                : <AvatarIcon source={perfil.icon}/>
-              }
-            </Pressable>
-          </Subheader>
-          
-          <HeadersHome>
-            {
-              !selectedCategoria &&
-              <>
-                <Menu onPress={() => callBackFilter('series')}>
-                  <Label>{lg.headerHome.series}</Label>
-                </Menu>
-  
-                <Menu onPress={() => callBackFilter('movie')}>
-                  <Label>{lg.headerHome.movies}</Label>
-                </Menu>
-              </>
-            }
-            
-            <Menu onPress={() => {
-              if(categorias.length < 1 ) return;
-              setShowCategorias(!showCategorias)
-            }}>
-              <SubMenu>
-                <Label>{selectedCategoria ?? lg.headerHome.category}</Label>
-                <FontAwesome size={22} style={{marginLeft: 5}} name={'caret-down'} color={'#FFF'}/>
-              </SubMenu>
-            </Menu>
-          </HeadersHome>
-        
-        </Container>
-      </LinearGradient>
+      {
+        isIos
+        ?
+        <LinearGradient
+          start={{x: width / 2, y: 0}}
+          end={{x: width / 2, y: 0.5}}
+          colors={['rgba(0, 0 , 0, 0.4)', 'rgba(0, 0 , 0, 0.5)', 'rgba(0, 0 , 0, 0)']}
+          style={{flex: 1, zIndex: -1}}
+        >
+          {renderHeader()}
+        </LinearGradient>
+        :
+        renderHeader()
+      }
       <Portal>
         <Modal visible={showCategorias} style={{ height: '100%' }}>
             <View style={{ height: '90%', alignItems: 'center', justifyContent: 'center', paddingTop: 30 }}>

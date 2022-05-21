@@ -1,7 +1,7 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useContext, useEffect, useState } from 'react';
+import { BackHandler, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
-import {Modal, Paragraph, Portal} from 'react-native-paper'
+import { Modal, Paragraph, Portal } from 'react-native-paper'
 import { Item } from './Movies'
 import TempStore from '../navigation/tempStore'
 
@@ -45,21 +45,21 @@ const ItemInfo = (props: ItemInfoProps) => {
   const { item, onClose } = props
   const { perfil, lg } = useContext(TempStore)
   
-  
-  useEffect(() => {
-    async function inicia() {
-      await load()
-    }
-    
-    inicia().then(() => {
+/*  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', function (){
+      onClose()
+      return true
     })
+    
     return () => {
+      BackHandler.removeEventListener('hardwareBackPress', function (){
+        onClose()
+        return true
+      })
+      console.log('destruiu')
     }
-  }, [])
+  }, [])*/
   
-  async function load() {
-  
-  }
   
   function Player(){
     return (
