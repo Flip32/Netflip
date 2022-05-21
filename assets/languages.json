@@ -59,6 +59,10 @@
       "Short":  "Curtas",
       "Sci-Fi":  "Ficção Científica",
       "Thriller": "Suspense"
+    },
+    "searchTitle": {
+      "allList": "Principais Buscas",
+      "filtered": "Filmes e Séries"
     }
   },
   "en": {
@@ -121,6 +125,10 @@
       "Short":  "Short",
       "Sci-Fi":  "Sci-Fi",
       "Thriller": "Thriller"
+    },
+    "searchTitle": {
+      "allList": "All Searches",
+      "filtered": "Movies and Series"
     }
   }
 }

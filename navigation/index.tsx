@@ -251,7 +251,7 @@ function BottomTabNavigator() {
         name={lg.pageTitles.search}
         component={SearchScreen}
         options={{
-          // headerShown: false,
+          headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />,
         }}
       />

@@ -65,6 +65,10 @@ const TempStore = createContext({
       "Short":  "Short",
       "Sci-Fi":  "Sci-Fi",
       "Thriller": "Thriller"
+    },
+    "searchTitle": {
+      "allList": "All Searches",
+      "filtered": "Movies and Series"
     }
   },
   setLg: () => {},
