@@ -102,12 +102,14 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     let arr = !!filtro ? itensR.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : itensR
     arr = !!filtroGenero ? arr.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())) : arr
     
+    const arrSorted = arr.sort((a, b) => {
+      if(a.imdbRating > b.imdbRating) return -1;
+      if(a.imdbRating < b.imdbRating) return 1;
+      return 0;
+    })
+    
     if(arr.length > 0){
-      setItensRecomendados(itensR.sort((a, b) => {
-        if(a.imdbRating > b.imdbRating) return -1;
-        if(a.imdbRating < b.imdbRating) return 1;
-        return 0;
-      }));
+      setItensRecomendados(arrSorted);
     }
   }
   
@@ -159,6 +161,8 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
   }, [minhaLista])
   
   function changeFilter(value: Filtro){
+    console.log('========================================')
+    console.log('filtro a ser aplicado => ', value)
     setFiltro(value)
   }
   
@@ -191,14 +195,14 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
             <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} onClickItem={(item: Item) => setShowItemInfo(item)} />
           </Gradient>
         </Poster>
-        { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
-          <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} onClickItem={(item: Item) => setShowItemInfo(item)} />
-        }
+        <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} onClickItem={(item: Item) => setShowItemInfo(item)} />
         {
           (!!itensMinhaLista && itensMinhaLista.length > 0) &&
           <Movies label={lg.blockTitle.myList} itens={itensMinhaLista} onClickItem={(item: Item) => setShowItemInfo(item)} />
         }
-        <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} onClickItem={(item: Item) => setShowItemInfo(item)} />
+        { (!!continuarAssisindo && continuarAssisindo.length > 0) &&
+          <Movies label={lg.blockTitle.keepWatching} itens={continuarAssisindo} onClickItem={(item: Item) => setShowItemInfo(item)} />
+        }
         <Movies label={itensTop10?.length < 10 ? `Top ${itensTop10.length}` : `${lg.blockTitle.top10}`} itens={itensTop10} onClickItem={(item: Item) => setShowItemInfo(item)} />
       </Container>
       {

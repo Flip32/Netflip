@@ -106,7 +106,7 @@ const Header = (props: Header) => {
         <Container>
           <Subheader>
             <Menu onPress={() => callBackFilter(null)}>
-              <Logo onPress={() => callBackFilter(null)} resizeMode="contain" source={require('../assets/logo.png')}/>
+              <Logo  resizeMode="contain" source={require('../assets/logo.png')}/>
             </Menu>
             <Pressable
               onPress={() => navigation.navigate('More')}
