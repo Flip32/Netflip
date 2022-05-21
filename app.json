@@ -20,6 +20,7 @@
     ],
     "ios": {
       "supportsTablet": false,
+      "bundleIdentifier": "com.flip.netflip",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Permita usar a galeria de fotos para cadastrar avatars",
         "NSFaceIDUsageDescription": "Permita usar o FaceID para fazer o Login",

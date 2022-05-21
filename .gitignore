@@ -14,7 +14,7 @@ web-build/
 .DS_Store
 
 
-./config/firebase.js
-./config/firebase.*
 config/firebase.ts
 google-services.json
+.env
+./config/.env
