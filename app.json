@@ -2,10 +2,15 @@
   "expo": {
     "name": "netflip",
     "slug": "netflip",
+    "privacy": "public",
+    "platforms": [
+      "android",
+      "ios"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "netflip",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -31,6 +36,12 @@
         "NSLocationWhenInUseUsageDescription": "A localidade será utilizada, quando concedida, para determinar a linguagem do app."
       }
       },
+    "notification": {
+      "icon": "./assets/images/icon.png",
+      "color": "#B1060F",
+      "androidMode": "collapse",
+      "androidCollapsedTitle": "#{unread_notifications} novas notificações"
+    },
     "android": {
       "package": "com.flip.netflip",
       "googleServicesFile": "./google-services.json",
