@@ -8,20 +8,14 @@ export async function registerForPushNotification(){
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
   );
-  console.log('========================================')
-  console.log('status 1', existingStatus)
   let finalStatus = existingStatus
   if (existingStatus !== 'granted') {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     finalStatus = status
   }
-  console.log('========================================')
-  console.log('finalStatus 1 ', finalStatus)
   if (finalStatus !== 'granted' && finalStatus !== 'undetermined') {
     return;
   }
-  console.log('========================================')
-  console.log('finalStatus 2 ', finalStatus)
   let token
   try{
     token = await Notifications.getExpoPushTokenAsync();
