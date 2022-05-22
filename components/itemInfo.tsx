@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'row',
     paddingHorizontal: 20
-  }
+  },
+  allLabels: { color: '#FFF' }
 })
 
 type ItemInfoProps = {
@@ -59,7 +60,6 @@ const ItemInfo = (props: ItemInfoProps) => {
       console.log('destruiu')
     }
   }, [])*/
-  
   
   function Player(){
     return (
@@ -92,15 +92,15 @@ const ItemInfo = (props: ItemInfoProps) => {
             
             <View style={styles.typeContainer}>
               <Image style={{ width: 20, height: 20 }} resizeMode="contain" source={require('../assets/logo.png')} />
-              <Paragraph allowFontScaling={false} style={{ marginLeft: 2 }}>{item.Type}</Paragraph>
+              <Paragraph allowFontScaling={false} style={[styles.allLabels, { marginLeft: 2 }]}>{item.Type}</Paragraph>
             </View>
-            <Paragraph allowFontScaling={false} style={{ marginLeft: 2 }}>{item.Title}</Paragraph>
+            <Paragraph allowFontScaling={false} style={[styles.allLabels, { marginLeft: 2 }]}>{item.Title}</Paragraph>
             <View style={[styles.typeContainer, {   }]}>
-              <Paragraph allowFontScaling={false} style={styles.typesLabels}>92% Relevante</Paragraph>
-              <Paragraph allowFontScaling={false} style={styles.typesLabels}>{item.Year}</Paragraph>
+              <Paragraph allowFontScaling={false} style={[styles.allLabels, styles.typesLabels]}>92% Relevante</Paragraph>
+              <Paragraph allowFontScaling={false} style={[styles.allLabels, styles.typesLabels]}>{item.Year}</Paragraph>
               {
                 item.Type === 'series' &&
-                <Paragraph allowFontScaling={false} style={styles.typesLabels}>{item.totalSeasons || 1}</Paragraph>
+                <Paragraph allowFontScaling={false} style={[styles.allLabels, styles.typesLabels]}>{item.totalSeasons || 1}</Paragraph>
               }
             </View>
           </View>
@@ -108,22 +108,22 @@ const ItemInfo = (props: ItemInfoProps) => {
           <View style={styles.actionButtonsContainer}>
             <TouchableOpacity style={[styles.actionButtons, { backgroundColor: '#FFF' }]}>
               <FontAwesome name={'play'} size={30} color={'rgb(32,32,32)'} style={styles.actButtonIcon}/>
-              <Paragraph allowFontScaling={false} style={{ color: 'rgb(32,32,32)' }}>Assistir</Paragraph>
+              <Paragraph allowFontScaling={false} style={[styles.allLabels, { color: 'rgb(32,32,32)' }]}>Assistir</Paragraph>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.actionButtons, { backgroundColor: 'rgb(32,32,32)' }]}>
               <FontAwesome name={'download'} size={30} color={'#fff'} style={styles.actButtonIcon}/>
-              <Paragraph allowFontScaling={false}>{ `Baixar ${item.Type === 'series' ? 'T3:E2' : ''}`}</Paragraph>
+              <Paragraph allowFontScaling={false} style={styles.allLabels}>{ `Baixar ${item.Type === 'series' ? 'T3:E2' : ''}`}</Paragraph>
             </TouchableOpacity>
           </View>
           
           <View style={styles.descricaoContainer}>
-            <Paragraph allowFontScaling={false}>{item.Plot}</Paragraph>
+            <Paragraph allowFontScaling={false} style={styles.allLabels}>{item.Plot}</Paragraph>
           </View>
   
           {
             item.Actors && item.Actors !== '' && item.Actors !== 'N/A' &&
             <View style={styles.elencoContainer}>
-              <Paragraph allowFontScaling={false} numberOfLines={1} style={{fontSize: 12}}>Elenco: {item.Actors}</Paragraph>
+              <Paragraph allowFontScaling={false} numberOfLines={1} style={[styles.allLabels, {fontSize: 12}]}>Elenco: {item.Actors}</Paragraph>
             </View>
           }
         </View>

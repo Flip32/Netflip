@@ -137,6 +137,7 @@ const CameraScreen = (props: any) => {
                 url = await saveAvatarOnStorage(image, name)
                 setLoading(false)
               } catch (e) {
+                console.log('Erro ao salvar imagem', e)
                 Alert.alert('Erro', 'Não foi possível salvar a foto')
                 setLoading(false)
               }

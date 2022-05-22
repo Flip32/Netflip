@@ -98,7 +98,11 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
     let arr = !!filtro ? api.filter(item => item.Type.toLowerCase().includes(filtro.toLowerCase())) : api
     arr = !!filtroGenero ? arr.filter(item => item.Genre.toLowerCase().includes(filtroGenero.toLowerCase())) : arr
     const itemAleatorio: Item = arr[Math.floor(Math.random() * arr.length)]
-    setDestaque(itemAleatorio)
+    if(!!itemAleatorio && !!itemAleatorio.Poster){
+      setDestaque(itemAleatorio)
+    } else {
+      setDestaque(itemDestaqueDefault)
+    }
   }
   
   function atualizarRecomendados() {
@@ -155,6 +159,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
         if(type === 'ShowMovie'){
           const findItem = api.find(item => item.imdbID === params.imdbID)
           if(!!findItem){
+            console.log('ta caindo nesse bloco 2')
             setShowItemInfo(findItem)
           } else {
             Alert.alert('Oops', 'Ocorreu um erro ao carregar a página')
@@ -197,6 +202,7 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
         if(rota === lg.pageTitles.home && type === 'ShowMovie'){
           const findItem = api.find(item => item.imdbID === params?.imdbID)
           if(findItem){
+            console.log('ta caindo nesse bloco 1')
             setShowItemInfo(findItem)
           } else {
             Alert.alert('Oops', 'Ocorreu um erro ao carregar a página')

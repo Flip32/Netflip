@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {View} from 'react-native';
 import Avatar from '../components/Avatar';
+import {isIos} from './HomeScreen'
 
 const Screen = styled.SafeAreaView`
   flex: 1;
@@ -71,8 +72,8 @@ const ChooseIcon = (props: any) => {
       </View>
       <Label>Create your avatar</Label>
       <Button
-        // color="#1a1718"
-        color="#fff"
+        color={isIos ? '#ffffff' : '#1a1718'}
+        // color="#fff"
         title="CAMERA"
         onPress={() => {
           props.navigation.navigate('Camera', {

@@ -53,7 +53,7 @@ export default function SearchScreen() {
                     <Image style={styles.itemImage} source={{uri: item.Poster}} />
             
                     <View style={styles.itemInfo}>
-                      <Text>{ item.Title }</Text>
+                      <Text style={styles.allLabels}>{ item.Title }</Text>
                     </View>
             
                     <View style={styles.playContainer}>
@@ -111,4 +111,5 @@ const styles = StyleSheet.create({
   
   itemContainerPosters: { flexDirection: 'row', marginBottom: 10 },
   itemImagePoster: { width: (width - 40)/3, height: ((height*0.8) - 80)/3, marginRight: 5, borderRadius: 4 },
+  allLabels: { color: '#FFF' }
 });
