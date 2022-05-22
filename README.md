@@ -19,9 +19,9 @@ expo start -c
 Use Expo Go for start the [release channel](https://expo.dev/@flipexpo/netflip?serviceType=classic&distribution=expo-go&release-channel=netflip_alfa)
 
 ## Release APK
-[Install apk](https://expo.dev/accounts/flipexpo/projects/netflip/builds/aa22a6d1-eb1f-4174-9b88-45897bb720ff)
+[Install apk](https://expo.dev/artifacts/eas/n1wpFwgrQg5XTQyNZK5EGF.apk)
 
-[How to install apk on Android (pt-BR)](https://expo.dev/artifacts/eas/n1wpFwgrQg5XTQyNZK5EGF.apk)
+[How to install apk on Android (pt-BR)](https://canaltech.com.br/android/como-instalar-um-apk-no-android/)
 
 ## For Push Notifications Teste
 
