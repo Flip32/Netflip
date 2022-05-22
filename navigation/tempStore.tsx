@@ -4,7 +4,7 @@ const TempStore = createContext({
   perfil: {icon: '', name: ''},
   setPerfil: () => {},
   profilesAvailables: [],
-  setProfilesAvailables: () => {},
+  setProfilesAvailables: (value) => {},
   lg: {
     "bottomIcons": {
       "home": "Home",

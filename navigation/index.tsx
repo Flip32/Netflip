@@ -80,103 +80,23 @@ export const profilesAvailablesInitial: Profile[] = [
   },
 ];
 
-const linguasDisponiveis = [ 'en', 'pt' ]
-type LG = {
-  "bottomIcons": {
-    "home": string
-    "search": string
-    "downloads": string
-    "menu": string
-    "soon": string
-  },
-  "headerHome": {
-    "series": string
-    "movies": string
-  },
-  "buttonsInteractive": {
-    "myList": string
-    "myAccount": string
-    "logout": string
-    "login": string
-    "register": string
-    "more": string
-    "watch": string
-  },
-  "blockTitle": {
-    "keepWatching": string
-    "myList": string
-    "recommended": string,
-    "top10": string
-  },
-  "settings": {
-    "editiPerfil": string
-    "edit": string
-  },
-  "pageTitles": {
-    "camera": RootTabParamList
-    "home": RootTabParamList
-    "search": RootTabParamList
-    "downloads": RootTabParamList
-    "menu": RootTabParamList
-    "soon": RootTabParamList
-  }
-}
 
 /*
 *  SE TIVER CLONADO ESSE PROJETO DO GITHUB, não esquecer de criar uma conta firebase,
 * criar um arquivo firebase.json com as credenciais do seu firebase,
 * adicionar o firabase ao android, e baixar o arquivo google-services.json
 */
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation({ authenticated, cacheAvatars, initialLG }) {
   const [perfil, setPerfil] = useState('teste')
   const [profilesAvailables, setProfilesAvailables] = useState<Profile[]>(profilesAvailablesInitial)
-  const [authenticated, setAuthenticated] = useState<boolean|null>(null)
-  const [lg, setLg] = useState<LG | null>(null)
+  const [lg, setLg] = useState(null)
   const [pushAction, setPushAction] = useState(null)
   
-  
-  async function userLogged(){
-    const persisted = await AsyncStorage.getItem('user');
-    try{
-      if(!!persisted){
-        const email = persisted.split('-')[0]
-        const password = persisted.split('-')[1]
-        const log = await singIn(email, password)
-        // @ts-ignore
-        if(log?.user.uid){
-          await getAllAvatarsFromDB(setProfilesAvailables)
-          setAuthenticated(true)
-        } else {
-          setAuthenticated(false)
-        }
-      } else {
-        setAuthenticated(false)
-      }
-    } catch (e) {
-      console.log('Deui ruim ao tentar logar', e)
-      setAuthenticated(false)
-    }
-  }
-  
-  /*
-  * Captura a linguagem do dispositivo do usuario
-  */
-  async function carregarLg(){
-    const localization = Localization.locale
-    const idioma = linguasDisponiveis.find(l => localization.includes(l))
-    if(!idioma){
-      // @ts-ignore
-      setLg(languages['en'])
-    } else {
-      // @ts-ignore
-      setLg(languages[idioma])
-    }
-    
-  }
-  
   useEffect(() => {
-    userLogged().then()
-    carregarLg().then()
+    if(cacheAvatars && cacheAvatars.length > 0){
+      setProfilesAvailables(cacheAvatars)
+    }
+    setLg(initialLG)
   }, [])
   
   return (
@@ -184,9 +104,8 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     <TempStore.Provider value={{ perfil, setPerfil, profilesAvailables, setProfilesAvailables, lg, setLg, setPushAction, pushAction }}>
       <NavigationContainer
         linking={LinkingConfiguration}
-        // theme={colorScheme === 'dark' ? DarkTheme : LightTheme}>
         theme={DarkTheme}>
-        <RootNavigator authenticated={authenticated} lg={lg} />
+        <RootNavigator authenticated={authenticated} />
       </NavigationContainer>
     </TempStore.Provider>
   );
@@ -199,10 +118,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 // @ts-ignore
-function RootNavigator({authenticated, lg}) {
-  if(lg === null || authenticated === null){
-    return <InitialPage/>
-  }
+function RootNavigator({authenticated}) {
   return (
     <Stack.Navigator initialRouteName={!!authenticated ? 'More' : 'AuthPage'}>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
@@ -212,7 +128,8 @@ function RootNavigator({authenticated, lg}) {
       <Stack.Screen name="ChooseIcon" component={ChooseIcon} options={{ headerShown: false }} />
       <Stack.Screen name="AuthPage" component={AuthPage} options={{ headerShown: false }} />
       <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
-      <Stack.Screen name="Camera" component={CameraScreen} options={{ title: lg.pageTitles.Camera }}  />
+      {/*<Stack.Screen name="Camera" component={CameraScreen} options={{ title: lg.pageTitles.Camera }}  />*/}
+      <Stack.Screen name="Camera" component={CameraScreen} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

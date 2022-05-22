@@ -70,7 +70,10 @@ const AuthPage = (props) => {
       if(!!tokenFCM){
         await saveTokenPushNotification(tokenFCM)
       }
-      await getAllAvatarsFromDB(setProfilesAvailables)
+      const newProfilesTemp: any = await getAllAvatarsFromDB()
+      if(newProfilesTemp && newProfilesTemp.length>0){
+        setProfilesAvailables(newProfilesTemp)
+      }
       setLoading(false)
       Alert.alert(
         'User Authenticated',
