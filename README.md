@@ -34,8 +34,7 @@ Data Json
       "navigateTo": "Home", 
       "params": 
         { 
-          "imdbID": "tt5206260", 
-          "fromNotification": true
+          "imdbID": "tt5206260"
         }
 }
 ```
