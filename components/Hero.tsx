@@ -1,10 +1,7 @@
-import React, {Fragment, useContext, useState} from 'react';
+import React, { Fragment, useContext } from 'react';
 import styled from 'styled-components/native';
-
-import {Feather, Ionicons} from '@expo/vector-icons';
-import {useSpring, animated} from 'react-spring';
-import {Item} from './Movies'
-import {removeItemOnList, saveItemOnList} from '../service/firestore'
+import { Feather, Ionicons } from '@expo/vector-icons';
+import { Item } from './Movies'
 import TempStore from '../navigation/tempStore'
 
 const Container = styled.View`
@@ -92,10 +89,12 @@ type Hero = {
   item: Item
   lista: any
   onClickItem: (item: Item) => void
+  removeItemOnList: (item, perfil, lista, callbackUpdateHome) => void
+  saveItemOnList: (item, perfil, lista, callbackUpdateHome) => void
 };
 
 const Hero = (props: Hero) => {
-  const { item, lista, callbackUpdateHome, onClickItem } = props;
+  const { item, lista, callbackUpdateHome, onClickItem, removeItemOnList, saveItemOnList } = props;
   const { perfil, lg } = useContext(TempStore);
   const tipo = item.Type
   const itemSaved = !!tipo && !!lista ? lista[tipo]?.find(i => i === item.imdbID) : null

@@ -1,8 +1,10 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
-import {View} from 'react-native';
+import {Platform, View} from 'react-native';
 import Avatar from '../components/Avatar';
-import {isIos} from './HomeScreen'
+
+
+const isIos = Platform.OS === 'ios'
 
 const Screen = styled.SafeAreaView`
   flex: 1;

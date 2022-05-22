@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Dimensions, Pressable, ScrollView, TouchableOpacity, View} from 'react-native'
+import React, { useContext, useEffect, useState } from 'react';
+import {Dimensions, Platform, Pressable, ScrollView, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native';
 import { css } from 'styled-components'
 import { FontAwesome } from '@expo/vector-icons';
@@ -7,7 +7,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { Portal, Modal } from 'react-native-paper'
 import TempStore from '../navigation/tempStore'
 import { Profile } from '../screens/MoreScreen'
-import {isIos} from '../screens/HomeScreen'
+
+const isIos = Platform.OS === 'ios'
 
 const { width, height } = Dimensions.get('window')
 

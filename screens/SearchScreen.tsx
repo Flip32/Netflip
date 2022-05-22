@@ -1,11 +1,23 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {SafeAreaView, ScrollView, StyleSheet, View, Image, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  FlatList,
+  Platform
+} from 'react-native';
 import { Searchbar, Paragraph, Text } from 'react-native-paper';
 import api from '../assets/movies.json'
 import { FontAwesome } from '@expo/vector-icons'
 import TempStore from '../navigation/tempStore'
 import ItemInfo from '../components/itemInfo'
-import {isIos} from './HomeScreen'
+
+
+const isIos = Platform.OS === 'ios'
 
 const {width, height } = Dimensions.get('window');
 

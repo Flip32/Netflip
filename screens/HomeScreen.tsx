@@ -13,8 +13,7 @@ import TempStore from '../navigation/tempStore'
 import { getMinhaLista} from '../service/firestore'
 import ItemInfo from '../components/itemInfo'
 import * as Notifications from 'expo-notifications'
-import {CommonActions} from '@react-navigation/native'
-import {getLastProfileFromStorage} from './MoreScreen'
+import { removeItemOnList, saveItemOnList } from '../service/firestore'
 
 export const isIos = Platform.OS === 'ios'
 
@@ -248,7 +247,15 @@ export default function HomeScreen(props: RootTabScreenProps<'Home'>) {
               'rgba(0,0,0,1)',
             ]}>
             <Header navigation={navigation} perfil={perfil} callBackFilter={changeFilter} callBackFilterGenre={changeFilterGenre} />
-            <Hero item={destaque} lista={minhaLista} callbackUpdateHome={atualizarMinhaLista} onClickItem={(item: Item) => setShowItemInfo(item)} />
+            <Hero
+              item={destaque}
+              lista={minhaLista}
+              callbackUpdateHome={atualizarMinhaLista}
+              onClickItem={(item: Item) => setShowItemInfo(item)}
+              removeItemOnList={removeItemOnList}
+              saveItemOnList={saveItemOnList}
+              
+            />
           </Gradient>
         </Poster>
         <Movies label={lg.blockTitle.recommended} itens={itensRecomendados} onClickItem={(item: Item) => setShowItemInfo(item)} />
