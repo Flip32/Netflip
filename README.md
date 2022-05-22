@@ -23,6 +23,23 @@ Install apk
 
 [How to install apk on Android (pt-BR)](https://canaltech.com.br/android/como-instalar-um-apk-no-android/)
 
+## For Push Notifications Teste
+
+Token: `ExponentPushToken[user_token]`
+
+Data Json 
+```json
+  { 
+      "type": "ShowMovie", 
+      "navigateTo": "Home", 
+      "params": 
+        { 
+          "imdbID": "tt5206260", 
+          "fromNotification": true
+        }
+}
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
